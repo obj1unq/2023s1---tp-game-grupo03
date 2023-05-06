@@ -2,6 +2,7 @@ class Vivero {
 	const tipoVivero= null
 	const plantas= #{}
 	const capacidad = 3
+	const property necesidad = new Necesidad()
 	
 	method agregarPlanta(planta){
 		plantas.add(planta)
@@ -13,6 +14,7 @@ class Vivero {
 	}
 	
 	method efecto(){
+		return necesidad
 		
 	}
 

@@ -2,8 +2,8 @@
 
 ## Equipo de desarrollo
 
-- Alguien
-- Persona
+- Sandoval Mauro
+- Ventola
 - etc.
 
 ## Capturas
