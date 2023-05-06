@@ -1,3 +1,5 @@
+import planta.*
+
 class Vivero {
 	const tipoVivero= null
 	const plantas= #{}
