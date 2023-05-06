@@ -3,7 +3,7 @@
 ## Equipo de desarrollo
 
 - Sandoval Mauro
-- Ventola
+- Ventola Gian Franco
 - etc.
 
 ## Capturas
