@@ -1,8 +1,14 @@
 import wollok.game.*
 import pepita.*
+import planta.*
 
 program juego {
 	game.title("Juego Base")
-	game.addVisual(pepita)
+	game.height(10)
+	game.width(19)
+	game.boardGround("pantallaGeneral.png")
+//	game.addVisual(pepita)
+	game.addVisual(planta1)
+	keyboard.k().onPressDo({planta1.crecer()})
 	game.start()
 }
