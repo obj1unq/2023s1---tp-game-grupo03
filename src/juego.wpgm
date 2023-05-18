@@ -1,14 +1,26 @@
 import wollok.game.*
-import pepita.*
-import planta.*
+import personaje.*
+import extras.*
+import invernadero.*
 
 program juego {
 	game.title("Juego Base")
 	game.height(10)
 	game.width(19)
 	game.boardGround("pantallaGeneral.png")
-//	game.addVisual(pepita)
+	game.addVisualCharacter(jardinero)
 	game.addVisual(planta1)
+	game.addVisual(agua)
+	game.addVisual(tierra)
+	//game.addVisual(invernaderoDia)
 	keyboard.k().onPressDo({planta1.crecer()})
+	keyboard.x().onPressDo{ jardinero.llevar(jardinero.obtenerObjetoDePosicion()) }
+	keyboard.z().onPressDo{ jardinero.dejar(jardinero.obtenerObjetoDePosicion()) }
+	
+	keyboard.up().onPressDo { jardinero.cambiarDireccion(up) }
+	keyboard.down().onPressDo { jardinero.cambiarDireccion(down) }
+	keyboard.left().onPressDo { jardinero.cambiarDireccion(left) }
+	keyboard.right().onPressDo { jardinero.cambiarDireccion(right) }
+	
 	game.start()
 }
