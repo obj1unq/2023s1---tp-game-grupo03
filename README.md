@@ -4,7 +4,9 @@
 
 - Sandoval Mauro
 - Ventola Gian Franco
-- etc.
+- Tatiana Rincon
+- Francisco Salig
+- Patricio Salles
 
 ## Capturas
 
