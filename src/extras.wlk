@@ -39,7 +39,7 @@ class Planta inherits Objeto {
 	var property tipo = null
 	var property estado = sana
 //	var property nivelCrecimiento = brote
-	var property crecimiento = [brote,intermedio]
+	var property crecimiento = [brote,intermedio,florecida]
 	const property necesidad = new Necesidad()
 	
 	override method image() {
@@ -72,6 +72,54 @@ class Necesidad {
 	}
 }
 
+
+class NivelCrecimiento {
+	
+	var property nivelAguaCorrecto = 0
+	var property nivelSolCorrecto = 0 
+	var property nivelTierraCorrecto =0 
+	var property diferenciaAceptada =0
+	
+	
+	method tieneAguaSuficiente(planta){
+		return planta.necesidad().agua().between(nivelAguaCorrecto - diferenciaAceptada, nivelAguaCorrecto + diferenciaAceptada)
+	}
+	
+	method tieneSolSuficiente(planta){
+		return planta.necesidad().sol().between(nivelSolCorrecto - diferenciaAceptada, nivelSolCorrecto + diferenciaAceptada)
+	}
+	
+	method tieneTierraSuficiente(planta){
+		return planta.necesidad().tierraAbonada().between(nivelTierraCorrecto - diferenciaAceptada, nivelTierraCorrecto + diferenciaAceptada)
+	}
+	
+	method puedeCrecer(planta){
+		return self.cantidadNecesidadesSatisfechas(planta) == 3
+	}
+	
+	method puedeMarchitarse(planta){
+		return self.cantidadNecesidadesSatisfechas(planta) <= 1
+	}
+	
+	method cantidadNecesidadesSatisfechas(planta){
+		return [self.tieneAguaSuficiente(planta), self.tieneSolSuficiente(planta), self.tieneTierraSuficiente(planta)].occurrencesOf(true)
+	}
+	
+	
+}
+
+object brote inherits NivelCrecimiento {
+	
+}
+
+object intermedio inherits NivelCrecimiento{
+	
+}
+
+object florecida inherits NivelCrecimiento{
+	
+}
+
 object sana {
 	
 }
@@ -80,18 +128,6 @@ object marchita {
 	
 }
 
-
-object brote {
-	
-}
-
-object intermedio{
-	
-}
-
-object florecida {
-	
-}
 const necesidadPlanta1 = new Necesidad(agua=3, sol=3, tierraAbonada=1)
 const planta1 = new Planta(tipo = "planta1", estado = sana, necesidad = necesidadPlanta1, position = game.at(10,3))
 const agua = new Agua(position = game.at(10,8))
