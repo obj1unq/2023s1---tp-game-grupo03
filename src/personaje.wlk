@@ -13,7 +13,7 @@ object jardinero {
 	method imagenSegunDireccion() {
 		return direccion.image()
 	}
-	
+
 	method cambiarDireccion(nuevoSentido) {
 		direccion = nuevoSentido
 	}
@@ -21,34 +21,33 @@ object jardinero {
 	method move(personaje) {
 		position = direccion.move(self)
 	}
-	
+
 	method obtenerObjetoDePosicion() {
 		var objetoEncontrado = null
 		const objetos = game.getObjectsIn(self.position())
-		if ( objetos.size() > 1 ) {
+		if (objetos.size() > 1) {
 			objetoEncontrado = objetos.last()
 		}
 		return objetoEncontrado
 	}
-	
+
 	method llevar(objeto) {
 		if (self.validarSiPuedeLlevar(objeto)) {
 			objeto.meEstaLlevando(self)
 			tieneObjeto = true
 		}
 	}
-	
+
 	method validarSiPuedeLlevar(objeto) {
 		return objeto != null && position == objeto.position() && not tieneObjeto
 	}
-	
+
 	method dejar(objeto) {
 		if (tieneObjeto) {
 			objeto.esDejado()
-			tieneObjeto = false	
+			tieneObjeto = false
 		}
-	}	
-
+	}
 }
 
 object right {

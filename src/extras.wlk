@@ -129,6 +129,6 @@ object marchita {
 }
 
 const necesidadPlanta1 = new Necesidad(agua=3, sol=3, tierraAbonada=1)
-const planta1 = new Planta(tipo = "planta1", estado = sana, necesidad = necesidadPlanta1, position = game.at(10,3))
+const planta1 = new Planta(tipo = "planta1", estado = sana, necesidad = necesidadPlanta1, position = game.at(7,3))
 const agua = new Agua(position = game.at(10,8))
 const tierra = new Tierra(position = game.at(12,4))
