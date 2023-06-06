@@ -11,24 +11,24 @@ describe "Pantallas disponibles en juego" {
 	
 	test "Pantalla Principal" {
 		pantallaPrincipal.iniciar()
-		assert.equals("pantallaGeneral.png", menuInicial.image())
-		assert.equals(musicaMenu, menuInicial.pista())
-		assert.equals(game.origin(), menuInicial.position())
+		assert.equals("pantallaGeneral.png", pantallaPrincipal.image())
+		assert.equals(musicaMenu, pantallaPrincipal.pista())
+		assert.equals(game.origin(), pantallaPrincipal.position())
 	}
 	
 	test "Pantalla de Intrucciones" {
 		pantallaIntrucciones.iniciar()
-		assert.equals("instrucciones.png", menuInicial.image())
-		assert.equals(musicaMenu, menuInicial.pista())
-		assert.equals(game.origin(), menuInicial.position())
+		assert.equals("instrucciones.png", pantallaIntrucciones.image())
+		assert.equals(musicaMenu, pantallaIntrucciones.pista())
+		assert.equals(game.origin(), pantallaIntrucciones.position())
 	}
 	
 	test "Pantalla Invernadero es nocturna o diurna" {
 		invernaderoNocturno.iniciar()
-		assert.equals("invernadero-interior-nocturno.png", menuInicial.image())
-		assert.equals(musicaInvernadero, menuInicial.pista())
+		assert.equals("invernadero-interior-nocturno.png", invernaderoNocturno.image())
+		assert.equals(musicaInvernadero, invernaderoNocturno.pista())
 		invernaderoDiurno.iniciar()
-		assert.equals("invernadero-interior-dia.png", menuInicial.image())
-		assert.equals(musicaInvernadero, menuInicial.pista())
+		assert.equals("invernadero-interior-dia.png", invernaderoDiurno.image())
+		assert.equals(musicaInvernadero, invernaderoDiurno.pista())
 	}
 }
