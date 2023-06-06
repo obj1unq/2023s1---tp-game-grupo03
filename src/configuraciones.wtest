@@ -1,0 +1,34 @@
+import configuraciones.*
+import wollok.game.*
+
+describe "Pantallas disponibles en juego" {
+	
+	test "Pantalla de menú inicial" {
+		assert.equals("menuInicial.png", menuInicial.image())
+		assert.equals(musicaMenu, menuInicial.pista())
+		assert.equals(game.origin(), menuInicial.position())
+	}
+	
+	test "Pantalla Principal" {
+		pantallaPrincipal.iniciar()
+		assert.equals("pantallaGeneral.png", menuInicial.image())
+		assert.equals(musicaMenu, menuInicial.pista())
+		assert.equals(game.origin(), menuInicial.position())
+	}
+	
+	test "Pantalla de Intrucciones" {
+		pantallaIntrucciones.iniciar()
+		assert.equals("instrucciones.png", menuInicial.image())
+		assert.equals(musicaMenu, menuInicial.pista())
+		assert.equals(game.origin(), menuInicial.position())
+	}
+	
+	test "Pantalla Invernadero es nocturna o diurna" {
+		invernaderoNocturno.iniciar()
+		assert.equals("invernadero-interior-nocturno.png", menuInicial.image())
+		assert.equals(musicaInvernadero, menuInicial.pista())
+		invernaderoDiurno.iniciar()
+		assert.equals("invernadero-interior-dia.png", menuInicial.image())
+		assert.equals(musicaInvernadero, menuInicial.pista())
+	}
+}

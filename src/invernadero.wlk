@@ -7,6 +7,10 @@ class Invernadero {
 	method image() {
 		return "invernadero-" + tipo.image() + ".png"
 	}
+	
+	method iniciar() {
+		game.addVisual("invernadero-interior-" + tipo.image() + ".png")
+	}
 }
 
 object nocturno {

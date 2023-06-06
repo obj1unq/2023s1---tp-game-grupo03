@@ -42,9 +42,9 @@ object pantallaPrincipal inherits Pantalla {
 	override method configTeclas() {
 		keyboard.k().onPressDo({planta1.crecer()})
 	    keyboard.x().onPressDo{ jardinero.llevar(jardinero.obtenerObjetoDePosicion()) }
-		keyboard.z().onPressDo{ jardinero.dejar(jardinero.obtenerObjetoDePosicion()) }
-		keyboard.n().onPressDo{ pantallaInvernadero.iniciar() }
-		keyboard.d().onPressDo{ pantallaInvernadero.iniciar() }
+		keyboard.z().onPressDo{ jardinero.dejar() }
+		keyboard.n().onPressDo{ invernaderoNocturno.iniciar() }
+		keyboard.d().onPressDo{ invernaderoDiurno.iniciar() }
 		keyboard.i().onPressDo{ pantallaIntrucciones.iniciar() }
 	
 		keyboard.up().onPressDo { jardinero.cambiarDireccion(up) }
@@ -76,30 +76,29 @@ object pantallaIntrucciones inherits Pantalla {
 	override method pista() {return musicaMenu}
 }
 
-object pantallaInvernadero inherits Pantalla {
-	var property image = "invernadero-interior.png"
-	
+class PantallaInvernadero inherits Pantalla {
 	override method configTeclas() {
 		keyboard.c().onPressDo{ pantallaPrincipal.iniciar() }
 		keyboard.i().onPressDo{ pantallaIntrucciones.iniciar() }
 		keyboard.x().onPressDo{ jardinero.llevar(jardinero.obtenerObjetoDePosicion()) }
-		keyboard.z().onPressDo{ jardinero.dejar(jardinero.obtenerObjetoDePosicion()) }
+		keyboard.z().onPressDo{ jardinero.dejar() }
 	}
 	
 	override method iniciar() {
 		super()
 		game.addVisualCharacter(jardinero)
-		self.validarSiTienePlanta()
+		jardinero.iniciar()
 	}
 	
 	override method pista() {return musicaInvernadero}
-	
-	// TO DO: Mejorar este método para que ingrese al invernadero con planta
-	method validarSiTienePlanta() {
-		if (jardinero.position() == planta1.position()) {
-			game.addVisual(planta1)
-		}
-	}
+}
+
+object invernaderoNocturno inherits PantallaInvernadero {
+	var property image = "invernadero-interior-nocturno.png"
+}
+
+object invernaderoDiurno inherits PantallaInvernadero {
+	var property image = "invernadero-interior-dia.png"
 }
 
 object rocola {
