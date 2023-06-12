@@ -1,0 +1,25 @@
+import personaje.*
+import wollok.game.*
+import extras.*
+
+describe "Manipulación de los objetos por parte del jardinero" {
+
+	const necesidadPlanta1 = new Necesidad(agua = 3, sol = 3, tierraAbonada = 1)
+	const planta1 = new Planta(tipo = "planta1", estado = sana, necesidad = necesidadPlanta1, position = game.at(7, 3))
+
+	test "Llevar un objeto" {
+		jardinero.position(game.at(7, 3))
+		jardinero.llevar(planta1)
+		assert.equals(planta1, jardinero.objetoEnPosesion())
+		assert.equals(jardinero, planta1.meEstaLlevando())
+	}
+	
+	test "Dejar un objeto" {
+		jardinero.llevar(planta1)
+		jardinero.dejar()
+		assert.equals(null, jardinero.objetoEnPosesion())
+		assert.equals(null, planta1.meEstaLlevando())
+	}
+
+}
+

@@ -4,8 +4,14 @@ object jardinero {
 
 	var property position = game.at(3, 3)
 	var property direccion = right
-	var property tieneObjeto = false
+	var property objetoEnPosesion = null
 
+	method iniciar() {
+		if (objetoEnPosesion != null) {
+			game.addVisual(objetoEnPosesion)
+		}
+	}
+	
 	method image() {
 		return "jardinero-" + self.imagenSegunDireccion() + ".png"
 	}
@@ -13,7 +19,7 @@ object jardinero {
 	method imagenSegunDireccion() {
 		return direccion.image()
 	}
-	
+
 	method cambiarDireccion(nuevoSentido) {
 		direccion = nuevoSentido
 	}
@@ -21,34 +27,31 @@ object jardinero {
 	method move(personaje) {
 		position = direccion.move(self)
 	}
-	
+
 	method obtenerObjetoDePosicion() {
-		var objetoEncontrado = null
-		const objetos = game.getObjectsIn(self.position())
-		if ( objetos.size() > 1 ) {
-			objetoEncontrado = objetos.last()
-		}
-		return objetoEncontrado
+		const objetos = game.colliders(self)
+		return if (objetos.size() > 0) {
+			objetos.first()
+		} else self
 	}
-	
+
 	method llevar(objeto) {
 		if (self.validarSiPuedeLlevar(objeto)) {
 			objeto.meEstaLlevando(self)
-			tieneObjeto = true
+			objetoEnPosesion = objeto
 		}
 	}
-	
-	method validarSiPuedeLlevar(objeto) {
-		return objeto != null && position == objeto.position() && not tieneObjeto
-	}
-	
-	method dejar(objeto) {
-		if (tieneObjeto) {
-			objeto.esDejado()
-			tieneObjeto = false	
-		}
-	}	
 
+	method validarSiPuedeLlevar(objeto) {
+		return objeto != self && position == objeto.position() && objetoEnPosesion == null
+	}
+
+	method dejar() {
+		if (objetoEnPosesion != null) {
+			objetoEnPosesion.esDejado()
+			objetoEnPosesion = null
+		}
+	}
 }
 
 object right {

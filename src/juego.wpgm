@@ -2,25 +2,16 @@ import wollok.game.*
 import personaje.*
 import extras.*
 import invernadero.*
+import configuraciones.*
 
 program juego {
-	game.title("Juego Base")
-	game.height(10)
-	game.width(19)
-	game.boardGround("pantallaGeneral.png")
-	game.addVisualCharacter(jardinero)
-	game.addVisual(planta1)
-	game.addVisual(agua)
-	game.addVisual(tierra)
-	//game.addVisual(invernaderoDia)
-	keyboard.k().onPressDo({planta1.crecer()})
-	keyboard.x().onPressDo{ jardinero.llevar(jardinero.obtenerObjetoDePosicion()) }
-	keyboard.z().onPressDo{ jardinero.dejar(jardinero.obtenerObjetoDePosicion()) }
+	game.title("WollokPlant")
+	game.height(9.6)
+	game.width(16)
+
+	game.boardGround("menuInicial.png")
 	
-	keyboard.up().onPressDo { jardinero.cambiarDireccion(up) }
-	keyboard.down().onPressDo { jardinero.cambiarDireccion(down) }
-	keyboard.left().onPressDo { jardinero.cambiarDireccion(left) }
-	keyboard.right().onPressDo { jardinero.cambiarDireccion(right) }
+	menuInicial.iniciar()
 	
 	game.start()
 }

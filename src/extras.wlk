@@ -11,7 +11,6 @@ class Objeto {
 	}
 	
 	method esDejado() {
-		// TODO: Revisar por qué falla cuando intento dejar un objeto sobre otro
 		position = meEstaLlevando.position()
 		meEstaLlevando = null
 	}
@@ -35,6 +34,7 @@ class Tierra inherits Objeto {
 }
 
 class Planta inherits Objeto {
+	// var property entorno -> dia o noche , con onTick le manda mensaje que corresponda para cada efecto (jardinero podria ser otro entorno)
 	
 	var property tipo = null
 	var property estado = sana
@@ -61,6 +61,7 @@ class Planta inherits Objeto {
 }
 
 class Necesidad {
+	// Propiedades o atributos de planta - Esta clase no va
 	var property agua = 0
 	var property sol = 0
 	var property tierraAbonada = 0 
@@ -74,7 +75,7 @@ class Necesidad {
 
 
 class NivelCrecimiento {
-	
+	// Lista de necesidades va aca y se hace u all para chequear que se cumplan todas para crecer
 	var property nivelAguaCorrecto = 0
 	var property nivelSolCorrecto = 0 
 	var property nivelTierraCorrecto =0 
@@ -129,6 +130,7 @@ object marchita {
 }
 
 const necesidadPlanta1 = new Necesidad(agua=3, sol=3, tierraAbonada=1)
-const planta1 = new Planta(tipo = "planta1", estado = sana, necesidad = necesidadPlanta1, position = game.at(10,3))
+const planta1 = new Planta(tipo = "planta1", estado = sana, necesidad = necesidadPlanta1, position = game.at(7,3))
+const planta2 = new Planta(tipo = "planta1", estado = sana, necesidad = necesidadPlanta1, position = game.at(5,4))
 const agua = new Agua(position = game.at(10,8))
 const tierra = new Tierra(position = game.at(12,4))

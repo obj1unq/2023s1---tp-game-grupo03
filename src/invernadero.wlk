@@ -7,6 +7,10 @@ class Invernadero {
 	method image() {
 		return "invernadero-" + tipo.image() + ".png"
 	}
+	
+	method iniciar() {
+		game.addVisual("invernadero-interior-" + tipo.image() + ".png")
+	}
 }
 
 object nocturno {
@@ -21,4 +25,5 @@ object diurno {
 	}
 }
 
-const invernaderoDia = new Invernadero(tipo = diurno, position = game.at(1,2))
+const invernaderoDia = new Invernadero(tipo = diurno, position = game.at(9,4))
+const invernaderoNoche = new Invernadero(tipo = nocturno, position = game.at(14,4))
