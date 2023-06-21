@@ -91,13 +91,13 @@ object paleta
 
 
 
-class Planta inherits Objeto
+class Planta inherits Objeto // subclase con los tipos de planta... 
 {
-	var property estado = sana
+	var property estado = sana // booleano
 	var etapa = [brote, intermedio, florecida]
 	var nivelAgua
 	var nivelTierra
-	var nivelSol
+	var nivelSol = 5
 	const property tipo // tropical, patagonica ó humeda
 	var desarrollo = 0
 	var deterioro = 0
@@ -120,43 +120,44 @@ class Planta inherits Objeto
 	{
 		return nivelSol
 	}
-	
+
 	method desarrollo()
 	{
 		return desarrollo
 	}
-	
+
 	method deterioro()
 	{
 		return deterioro
 	}
-	
+
 	method aplicarDesarrollo(cantidad)
 	{
 		desarrollo += cantidad
 	}
-	
+
 	method aplicarDeterioro(cantidad)
 	{
 		deterioro += cantidad
 	}
-	
+
 	override method image()
 
 	{
 		return tipo.toString() + "-" + self.etapa().toString() + "-" + estado.toString() + ".png"
 	}
-	
+
 	method etapa()
 	{
 		return etapa.first()
 	}
-	
+
 	method crecer()
 	{
-		etapa = etapa.drop(1)	
+		self.puedeCrecer()
+		etapa = etapa.drop(1)
 	}
-	
+
 	method aplicarEfecto(elemento)
 	{
 		elemento.aplicarEfecto(self)
@@ -181,14 +182,16 @@ class Planta inherits Objeto
 	{
 		return tipo.necesidadesSatisfechas(self) < 2
 	}
-	
-	
 }
 
 
 class TipoDePlanta
 {	
 	const property listaDeNecesidades = #{ self.tieneAguaSuficiente(planta), self.tieneAguaSuficiente(planta), self.tieneAguaSuficiente(planta) }
+	
+	method minimo()
+	
+	method maximo()
 	
 	method tieneAguaSuficiente(planta)
 	
@@ -235,7 +238,7 @@ object patagonica inherits TipoDePlanta
 	{
 		return planta.nivelAgua().between(40, 70)
 	}
-	
+
 	override	method tieneSolSuficiente(planta)
 	{
 		return planta.nivelSol().between(30, 60)

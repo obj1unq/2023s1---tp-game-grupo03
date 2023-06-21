@@ -21,7 +21,7 @@ class Vivero
 	
 	method aplicarEfecto()
 	{
-		plantas.forEach{planta=>planta.recibirEfecto(self)}
+		plantas.forEach{planta=>planta.recibirEfecto(self) } // 
 	}
 	
 	method efecto()

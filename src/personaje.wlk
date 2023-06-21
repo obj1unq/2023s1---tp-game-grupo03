@@ -2,7 +2,6 @@
 
 object jardinero
 {
-
 	var property position = game.at(3, 3)
 	var property direccion = right
 	var property objetoEnPosesion = null
@@ -111,7 +110,6 @@ object up {
 	method move(personaje) {
 		return personaje.position().up(1)
 	}
-
 }
 
 object down {
