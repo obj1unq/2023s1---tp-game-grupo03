@@ -1,17 +1,20 @@
 import wollok.game.*
 import personaje.*
 import extras.*
-import invernadero.*
+import entornos.*
 import configuraciones.*
 
-program juego {
+program juego
+{
 	game.title("WollokPlant")
 	game.height(9.6)
 	game.width(16)
-
+	
+	
 	game.boardGround("menuInicial.png")
 	
 	menuInicial.iniciar()
 	
 	game.start()
+	
 }

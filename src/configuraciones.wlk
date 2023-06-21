@@ -1,11 +1,12 @@
 import wollok.game.*
 import personaje.*
 import extras.*
-import invernadero.*
+import entornos.*
 
-class Pantalla {
-	
-	method iniciar() { 
+class Pantalla
+{
+	method iniciar()
+	{
 		game.clear()
 		game.addVisual(self)
 		self.configTeclas()
@@ -13,7 +14,10 @@ class Pantalla {
 	}
 	
 	// Siempre es la misma posicion de fondo
-	method position(){return game.origin()}
+	method position()
+	{
+		return game.origin()
+	}
 	
 	// Todas tienen que declarar su imagen
 	method image()
@@ -21,44 +25,70 @@ class Pantalla {
 	// La configuración de sus teclas
 	method configTeclas()
 	
-	method pista() // <-- es el número de pista de la rocola
+	method pista() // <-- Es el número de pista de la rocola
 }
 
-object menuInicial inherits Pantalla {
+object menuInicial inherits Pantalla
+{
+	override method image()
+	{ 
+		return "menuInicial.png"
+	}
 	
-	override method image(){ return "menuInicial.png"}
-	
-	override method configTeclas() {
+	override method configTeclas()
+	{
 		keyboard.enter().onPressDo({ pantallaPrincipal.iniciar() })
 		keyboard.num1().onPressDo({ pantallaIntrucciones.iniciar() })
 	}
 	
-	override method pista() {return musicaMenu}
+	override method pista()
+	{
+		return musicaMenu
+	}
 }
 
-object pantallaPrincipal inherits Pantalla {
-	var property image = "pantallaGeneral.png"
+
+object pantallaPrincipal inherits Pantalla
+{
+	var property image = "exterior.png"
 	
-	override method configTeclas() {
-		keyboard.k().onPressDo({planta1.crecer()})
-	    keyboard.x().onPressDo{ jardinero.llevar(jardinero.obtenerObjetoDePosicion()) }
-		keyboard.z().onPressDo{ jardinero.dejar() }
-		keyboard.n().onPressDo{ invernaderoNocturno.iniciar() }
-		keyboard.d().onPressDo{ invernaderoDiurno.iniciar() }
-		keyboard.i().onPressDo{ pantallaIntrucciones.iniciar() }
+	override method configTeclas()
+	{
+		keyboard.k().onPressDo( {palmera.crecer()} )
+		
+		// Objetos
+	    keyboard.x().onPressDo( {jardinero.llevar( jardinero.obtenerObjetoDePosicion() )} )
+		keyboard.z().onPressDo( {jardinero.dejar()} )
+		// keyboard.k().onPressDo( game.say(jardinero, "Los objetos son:" + game.colliders(jardinero) )		
+		
+		// Pantallas
+		keyboard.n().onPressDo( {invernaderoNocturno.iniciar()} )
+		keyboard.d().onPressDo( {invernaderoDiurno.iniciar()} )
+		keyboard.i().onPressDo( {pantallaIntrucciones.iniciar()} )
 	
+		// Moverse
 		keyboard.up().onPressDo { jardinero.cambiarDireccion(up) }
 		keyboard.down().onPressDo { jardinero.cambiarDireccion(down) }
 		keyboard.left().onPressDo { jardinero.cambiarDireccion(left) }
 		keyboard.right().onPressDo { jardinero.cambiarDireccion(right) }
 	}
 	
-	override method iniciar() {
+	override method iniciar()
+	{
 		super()
 		game.addVisual(invernaderoDia)
 		game.addVisual(invernaderoNoche)
 		game.addVisualCharacter(jardinero)
-		game.addVisual(planta1)
+		game.addVisual(palmera)
+		game.addVisual(pino)
+		game.addVisual(orquidea)
+		game.showAttributes(pino)
+		game.showAttributes(palmera)
+		game.showAttributes(orquidea)
+		
+		// game.addVisual(indicadorPino)
+		
+		
 		game.addVisual(agua)
 		game.addVisual(tierra)
 	}
@@ -66,92 +96,122 @@ object pantallaPrincipal inherits Pantalla {
 	override method pista() {return musicaMenu}
 }
 
-object pantallaIntrucciones inherits Pantalla {
+
+object pantallaIntrucciones inherits Pantalla
+{
 	var property image = "instrucciones.png"
 	
-	override method configTeclas() {
+	override method configTeclas()
+	{
 		keyboard.enter().onPressDo({ pantallaPrincipal.iniciar() })
 	}
 	
-	override method pista() {return musicaMenu}
+	override method pista() { return musicaMenu }
 }
 
-class PantallaInvernadero inherits Pantalla {
-	override method configTeclas() {
+
+class PantallaInvernadero inherits Pantalla
+{
+	override method configTeclas()
+	{
 		keyboard.c().onPressDo{ pantallaPrincipal.iniciar() }
 		keyboard.i().onPressDo{ pantallaIntrucciones.iniciar() }
 		keyboard.x().onPressDo{ jardinero.llevar(jardinero.obtenerObjetoDePosicion()) }
 		keyboard.z().onPressDo{ jardinero.dejar() }
+		keyboard.p().onPressDo{ game.say(jardinero, "Mi posición es" + jardinero.position()) }
 	}
-	
-	override method iniciar() {
+
+	override method iniciar()
+	{
 		super()
 		game.addVisualCharacter(jardinero)
 		jardinero.iniciar()
 	}
-	
-	override method pista() {return musicaInvernadero}
+
+	override method pista()
+	{
+		return musicaInvernadero
+	}
 }
 
-object invernaderoNocturno inherits PantallaInvernadero {
+
+object invernaderoNocturno inherits PantallaInvernadero
+{
 	var property image = "invernadero-interior-nocturno.png"
 }
 
-object invernaderoDiurno inherits PantallaInvernadero {
+
+object invernaderoDiurno inherits PantallaInvernadero
+{
 	var property image = "invernadero-interior-dia.png"
 }
 
-object rocola {
+
+object rocola
+{
 	
 	var track = musicaMenu.sonido()
 	
-	method iniciar(){
+	method iniciar()
+	{
 		track.shouldLoop(true)
 		track.volume(0.2)
 		game.schedule(100,{track.play()})
 	}
 	
-	method cambiarTrack(musica){
-		if(self.hayTrackSonando()){
-			if(self.hayCambioDeTrack(musica)){
+	method cambiarTrack(musica)
+	{
+		if( self.hayTrackSonando() )
+		{
+			if( self.hayCambioDeTrack(musica) )
+			{
 				track.pause()
 				track = musica.sonido()
 				track.volume(0.2)
 				track.shouldLoop(true)
 				self.reproducirTrack()
 			}
-		}else{
+		}
+		else
+		{
 			self.iniciar()
 		}
 	}
 	
-	method hayCambioDeTrack(musica) {
+	method hayCambioDeTrack(musica)
+	{
 		return track != musica.sonido()
 	}
 	
-	method hayTrackSonando(){
+	method hayTrackSonando()
+	{
 		return track.played() and not track.paused()
 	}
 	
-	method trackEstaPausada(){	
+	method trackEstaPausada()
+	{	
 		return track.played() and track.paused()	
 	}	
 
-	method reproducirTrack() {	
-		if(self.trackEstaPausada()){	
+	method reproducirTrack()
+	{	
+		if( self.trackEstaPausada() )
+		{	
 			track.resume()	
-		}else{	
+		}
+		else
+		{	
 			track.play()	
 		}	
 	}
 }
 
-object musicaMenu {
-	
+object musicaMenu
+{
 	const property sonido = game.sound("openingSound.wav")
 }
 
-object musicaInvernadero {
-	
+object musicaInvernadero
+{
 	const property sonido = game.sound("invernaderoSound.mp3")
 }
