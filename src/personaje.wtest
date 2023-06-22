@@ -20,6 +20,5 @@ describe "Manipulación de los objetos por parte del jardinero" {
 		assert.equals(null, jardinero.objetoEnPosesion())
 		assert.equals(null, planta1.meEstaLlevando())
 	}
-
 }
 
