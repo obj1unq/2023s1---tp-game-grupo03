@@ -79,14 +79,9 @@ object pantallaPrincipal inherits Pantalla
 		game.addVisual(invernaderoDia)
 		game.addVisual(invernaderoNoche)
 		game.addVisualCharacter(jardinero)
-		game.addVisual(palmera)
+		game.addVisual( pino.iconoAgua() ) // Aparecerá por encima del pino
 		game.addVisual(pino)
-		game.addVisual(orquidea)
-		game.showAttributes(pino)
-		game.showAttributes(palmera)
-		game.showAttributes(orquidea)
 		
-		// game.addVisual(indicadorPino)
 		
 		
 		game.addVisual(agua)

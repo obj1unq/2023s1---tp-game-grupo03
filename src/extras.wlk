@@ -1,5 +1,42 @@
 import wollok.game.*
 
+class Necesidad
+{
+	const planta
+		
+	method image()
+	
+	method position()
+	{
+		return planta.position()
+	}
+}
+
+class IndicadorAgua inherits Necesidad
+{
+	override method image()
+	{
+		return "necesidadAgua.png"
+	}
+}
+
+class IndicadorTierra inherits Necesidad
+{
+	override method image()
+	{
+		return "necesidadTierra.png"
+	}
+}
+
+class IndicadorSol inherits Necesidad
+{
+	override method image()
+	{
+		return "necesidadSol.png"
+	}
+}
+
+
 class Objeto
 {
 	var property position
@@ -25,7 +62,7 @@ class Elemento inherits Objeto
 }
 
 
-class Tierra inherits Elemento
+class MonticuloTierra inherits Elemento
 {
 	override method image()
 	{
@@ -38,7 +75,7 @@ class Tierra inherits Elemento
 	}
 }
 
-class Agua inherits Elemento
+class BaldeAgua inherits Elemento
 {
 	override method image()
 	{
@@ -58,7 +95,7 @@ class Agua inherits Elemento
 // Esta clase es para agregar un segundo texto a las plantas que podría indicar alguna necesidad a cubrir.
 class TextoAtributo
 {
-	const planta
+	const planta 
 	
 	method text() = "Necesidad: " + planta.necesidad()
 	
@@ -98,13 +135,54 @@ class Planta inherits Objeto // subclase con los tipos de planta...
 	var nivelAgua
 	var nivelTierra
 	var nivelSol = 5
-	const property tipo // tropical, patagonica ó humeda
 	var desarrollo = 0
 	var deterioro = 0
-
-	method text() = "A: " + self.nivelAgua() + " | " + "T: " + self.nivelTierra() + " | " + "S: " + self.nivelSol()
 	
-	method textColor() = paleta.verde()
+/*
+	 - Si la planta tiene una necesidad, 
+	 1° game.removeVisual(self)
+	 2° game.addVisual(necesidad, (iconoAgua, iconoTierra, etc) )
+	 3° game.addVisual(self)
+*/
+
+	// Hay que arreglar el tema de que el personaje quiere agarrar el objeto indicador y no la planta. Debería ignorar el objeto indicador.
+	const property iconoAgua = new IndicadorAgua( planta = self )
+	const property iconoTierra = new IndicadorAgua( planta = self )
+	const property iconoSol = new IndicadorAgua( planta = self )
+	
+	
+	
+	
+	method tipo()
+
+	// method text() = "A: " + self.nivelAgua() + " | " + "T: " + self.nivelTierra() + " | " + "S: " + self.nivelSol()
+	
+	// method textColor() = paleta.verde()
+	
+	
+/*
+	method generarBrote()
+	{
+		const
+	}
+*/
+
+/*	
+	method buscarPosicionLibre()
+	{
+		return #{game.getObjectsIn( self.position().x() - 1 ), game.getObjectsIn( self.position().x() + 1 ), game.getObjectsIn( self.position().y() - 1 ), game.getObjectsIn( self.position().x() + 1 )}.find({posicion => })
+	}
+*/
+
+	method posicionLibre()
+	{
+		var position = self.position()
+		const alrededores = #{game.getObjectsIn( self.position().x() - 1 ), game.getObjectsIn( self.position().x() + 1 ), game.getObjectsIn( self.position().y() - 1 ), game.getObjectsIn( self.position().y() + 1 )}
+		position = alrededores.find( {elemento => elemento.isEmpty()} )
+		return position
+	}
+	
+	
 	
 	method nivelAgua()
 	{
@@ -144,7 +222,7 @@ class Planta inherits Objeto // subclase con los tipos de planta...
 	override method image()
 
 	{
-		return tipo.toString() + "-" + self.etapa().toString() + "-" + estado.toString() + ".png"
+		return self.tipo() + "-" + self.etapa().toString() + "-" + estado.toString() + ".png"
 	}
 
 	method etapa()
@@ -154,13 +232,19 @@ class Planta inherits Objeto // subclase con los tipos de planta...
 
 	method crecer()
 	{
-		self.puedeCrecer()
 		etapa = etapa.drop(1)
+		self.aplicarDesarrollo( -self.desarrollo() ) // El valor desarrollo vuelve a cero.
+		self.aplicarDeterioro( -self.deterioro() ) // El valor deterioso vuelve a cero.
+	}
+	
+	method marchitar()
+	{
+		estado = marchita
 	}
 
-	method aplicarEfecto(elemento)
+	method aumentoSol(cantidad)
 	{
-		elemento.aplicarEfecto(self)
+		nivelSol += cantidad
 	}
 	
 	method aumentoAgua(cantidad)
@@ -172,120 +256,78 @@ class Planta inherits Objeto // subclase con los tipos de planta...
 	{
 		nivelTierra += cantidad
 	}
+
+	method puedeMarchitarse()
+	{
+		return self.necesidadesSatisfechas() < 2 and self.deterioro() >= 99
+	}
 	
 	method puedeCrecer()
 	{
-		return tipo.necesidadesSatisfechas(self) == 3
+		return self.necesidadesSatisfechas() == 3 and self.desarrollo() >= 99
 	}
 	
-	method puedeMarchitarse()
+	method necesidadesSatisfechas()
 	{
-		return tipo.necesidadesSatisfechas(self) < 2
+		return self.tieneAguaSuficiente() and self.tieneTierraSuficiente() and self.tieneSolSuficiente()
+	}
+	
+	method tieneAguaSuficiente()
+	method tieneTierraSuficiente()
+	method tieneSolSuficiente()
+	
+	method necesidadMasUrgente()
+	{
+		
 	}
 }
 
-
-class TipoDePlanta
-{	
-	const property listaDeNecesidades = #{ self.tieneAguaSuficiente(planta), self.tieneAguaSuficiente(planta), self.tieneAguaSuficiente(planta) }
-	
-	method minimo()
-	
-	method maximo()
-	
-	method tieneAguaSuficiente(planta)
-	
-	method tieneSolSuficiente(planta)
-
-	method tieneTierraSuficiente(planta)	
-	
-	method necesidadesSatisfechas(planta)
-	{
-		return [self.tieneAguaSuficiente(planta), self.tieneSolSuficiente(planta), self.tieneTierraSuficiente(planta)].occurrencesOf(true)
-	}
-	
-/*
-	method necesidadInsatisfecha(planta)
-	{
-		return [self.tieneAguaSuficiente(planta), self.tieneSolSuficiente(planta), self.tieneTierraSuficiente(planta)].findOrDefault( {necesidad => necesidad})
-	}
-		La idea sería colocar otro texto encima de las plantas que indique alguna necesidad insatisfecha.
-*/
-
-}
-
-object tropical inherits TipoDePlanta
+class PlantaPatagonica inherits Planta
 {
-	override	method tieneAguaSuficiente(planta)
+	override method tipo()
 	{
-		return planta.nivelAgua().between(30, 60)
+		return "patagonica"
 	}
 	
-	override	method tieneSolSuficiente(planta)
+	override method tieneAguaSuficiente()
 	{
-		return planta.nivelSol().between(70, 100)
+		return self.nivelAgua().between(40, 70)
 	}
 	
-	override	method tieneTierraSuficiente(planta)
+	override method tieneTierraSuficiente()
 	{
-		return planta.nivelTierra().between(40, 70)
+		return self.nivelAgua().between(60, 90)
+	}
+
+	override method tieneSolSuficiente()
+	{
+		return self.nivelAgua().between(30, 60)
 	}
 }
-
-object patagonica inherits TipoDePlanta
-{
-	override	method tieneAguaSuficiente(planta)
-	{
-		return planta.nivelAgua().between(40, 70)
-	}
-
-	override	method tieneSolSuficiente(planta)
-	{
-		return planta.nivelSol().between(30, 60)
-	}
-	
-	override	method tieneTierraSuficiente(planta)
-	{
-		return planta.nivelTierra().between(60, 90)
-	}
-}
-
-object humeda inherits TipoDePlanta
-{
-	override	method tieneAguaSuficiente(planta)
-	{
-		return planta.nivelAgua().between(70, 100)
-	}
-	
-	override	method tieneSolSuficiente(planta)
-	{
-		return planta.nivelSol().between(50, 80)
-	}
-	
-	override	method tieneTierraSuficiente(planta)
-	{
-		return planta.nivelTierra().between(40, 70)
-	}
-}
-
 
 class NivelDeCrecimiento
 {
 	method aplicarDeterioro(planta)
+	{
+		planta.aplicarDeterioro()
+	}
 	
 	method aplicarDesarrollo(planta)
+	{
+		planta.aplicarDesarrollo()
+	}
 }
 
 object brote inherits NivelDeCrecimiento
 {
 	override method aplicarDeterioro(planta)
 	{
-		planta.aplicarDeterioro(33)
+		super(33) 
 	}
 	
 	override method aplicarDesarrollo(planta)
 	{
-		planta.aplicarDesarrollo(50)
+		super(50)
 	}
 }
 
@@ -293,12 +335,12 @@ object intermedio inherits NivelDeCrecimiento
 {
 	override method aplicarDeterioro(planta)
 	{
-		planta.aplicarDeterioro(50)
+		super(50)
 	}
 	
 	override method aplicarDesarrollo(planta)
 	{
-		planta.aplicarDesarrollo(33)
+		super(33)
 	}
 }
 
@@ -306,12 +348,12 @@ object florecida inherits NivelDeCrecimiento
 {
 	override method aplicarDeterioro(planta)
 	{
-		planta.aplicarDeterioro(33)
+		super(33)
 	}
 	
 	override method aplicarDesarrollo(planta)
 	{
-		planta.aplicarDesarrollo(25)
+		super(50)
 	}
 }
 
@@ -319,9 +361,10 @@ object sana{}
 object marchita{}
 
 
-const palmera = new Planta(tipo = "tropical", estado = sana, position = game.at(7,3), nivelAgua = 45, nivelSol = 85, nivelTierra = 55)
-const pino = new Planta(tipo = "patagonica", estado = sana, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
-const orquidea = new Planta(tipo = "humeda", estado = sana, position = game.at(7,5), nivelAgua = 85, nivelSol = 60, nivelTierra = 55)
-const agua = new Agua(position = game.at(10,8))
-const tierra = new Tierra(position = game.at(12,4))
+// const palmera = new Planta(tipo = "tropical", estado = sana, position = game.at(7,3), nivelAgua = 45, nivelSol = 85, nivelTierra = 55)
+const pino = new PlantaPatagonica(estado = sana, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+// const orquidea = new Planta(tipo = "humeda", estado = sana, position = game.at(7,5), nivelAgua = 85, nivelSol = 60, nivelTierra = 55)
+
+const tierra = new MonticuloTierra(position = game.at(6,0))
+const agua = new BaldeAgua(position = game.at(7,0))
 
