@@ -1,0 +1,57 @@
+import entornos.*
+
+
+describe "Test entorno" {
+	
+//	const exterior = new Intemperie (calor = 30, soleado = true, humedad = 40)
+//	const invernaderoDia = new InvernaderoDiurno(humedad = 20, calor = exterior.calor(), soleado = true, rociador = 5, tipo = "dia", position = null)
+//	const invernaderoNoche = new InvernaderoNocturno(humedad = 20, soleado = false, rociador = 10, calor = 30, tipo = "nocturno", position = null)
+	
+	test "Test exterior" {
+		assert.equals(30,exterior.modificarSol())
+		//comprobar que la cantidad de sol que aporta exterior es 30
+		assert.equals(-5,exterior.modificarAgua())
+		//Comprobar que la cantidad de agua que resta es 5
+		assert.equals(10,exterior.modificarTierra())
+		//Comprobar que la cantidad de tierra es 10 (mitad de calor pero maximo 10)
+		exterior.soleado(false)
+		//cambiar el clima a nublado
+		assert.equals(-20,exterior.modificarSol())
+		//comprobar que la cantidad de sol que aporta exterior es 20
+		assert.equals(10,exterior.modificarAgua())
+		//comprobar que la cantidad de agua que aporta es 10
+		assert.equals(15,exterior.modificarTierra())
+		//comprobar que la cantidad de tierra que aporta es 15 
+	}
+	
+	test "InvernaderoDiurno" {
+		exterior.calor(15)
+		//Comprobar que el sol es 7.5
+		assert.equals(7.5,invernaderoDia.modificarSol())
+		//Comprobar que el agua es 5
+		assert.equals(5,invernaderoDia.modificarAgua())
+		//Comprobar que NO fue un dia caluroso
+		assert.notThat(invernaderoDia.diaCaluroso())
+		//Comprobar que aporta 10 de tierra
+		assert.equals(10,invernaderoDia.modificarTierra())
+		//Modificar el calor del exterior a 30
+		exterior.calor(30)
+		//Comprobar que es un dia caluroso
+		assert.that(invernaderoDia.diaCaluroso())
+		//Comprobar que resta 6 de tierra
+		assert.equals(-6,invernaderoDia.modificarTierra())
+	}
+	
+	test "InvernaderoNocturno cuando fue TODO el dia nublado" {
+		
+		assert.equals(-20,invernaderoNoche.modificarSol())
+		//Comprobar que resta 10 de sol
+		assert.equals(20,invernaderoNoche.modificarAgua())
+		//Comprobar que agua es 20 al ser dia soleado
+		assert.equals(-3,invernaderoNoche.modificarTierra())
+		//Comprobar que tierra -3
+		
+	}	
+		
+		
+}
