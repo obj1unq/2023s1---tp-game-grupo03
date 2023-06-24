@@ -1,10 +1,10 @@
 import wollok.game.*
 import personaje.*
 import extras.*
+import plantas.*
 import entornos.*
 
-class Pantalla
-{
+class Pantalla{
 	method iniciar()
 	{
 		game.clear()
@@ -54,8 +54,14 @@ object pantallaPrincipal inherits Pantalla
 	
 	override method configTeclas()
 	{
-		keyboard.k().onPressDo( {palmera.crecer()} )
+//		keyboard.k().onPressDo( {pino.crecer()} )
+//		keyboard.s().onPressDo( {pino.aumentoSol(5)} )
+//		keyboard.a().onPressDo( {pino.aumentoAgua(5)} )
+//		keyboard.t().onPressDo( {pino.aumentoTierra(5)} )
+//		keyboard.q().onPressDo( {pino.aplicarDesarrollo(100)} )
+//      el codigo de arriba comentado lo use para probar el crecimiento de la planta ( y sus excepciones) 
 		
+
 		// Objetos
 	    keyboard.x().onPressDo( {jardinero.llevar( jardinero.obtenerObjetoDePosicion() )} )
 		keyboard.z().onPressDo( {jardinero.dejar()} )
