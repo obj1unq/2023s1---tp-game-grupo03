@@ -14,7 +14,7 @@ program juego
 	
 	game.boardGround("menuInicial.png")
 	
-	menuInicial.iniciar()
+	menuInicial.iniciar(menuInicial)
 	
 	game.start()
 	

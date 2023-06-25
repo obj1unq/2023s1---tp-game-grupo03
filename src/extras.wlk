@@ -1,9 +1,16 @@
 import wollok.game.*
 import plantas.*
+import configuraciones.*
+import randomizer.*
 
 class Objeto{
 	var property position
 	var property meEstaLlevando = null
+	var property pantallaActual = pantallaPrincipal
+	
+	method iniciar(pantalla) {
+		if (pantalla == pantallaActual) game.addVisual(self)
+	}
 	
 	method image()
 	
@@ -11,13 +18,20 @@ class Objeto{
 		return if( meEstaLlevando != null ) meEstaLlevando.position() else position
 	}
 	
-	method esDejado(){
+	method esDejado(ambiente) {
 		position = meEstaLlevando.position()
+		pantallaActual = ambiente
 		meEstaLlevando = null
 	}
+	
 }
 
 class Elemento inherits Objeto{	
+	override method iniciar(pantalla) {
+		self.position(randomizer.emptyPosition())
+		game.addVisual(self)
+	}
+	
 	method aplicarEfecto(planta)
 }
 
@@ -28,6 +42,7 @@ class MonticuloTierra inherits Elemento{
 	
 	override method aplicarEfecto(planta){
 		planta.aumentoTierra(10)
+		game.removeVisual(self)
 	}
 }
 
@@ -38,6 +53,7 @@ class BaldeAgua inherits Elemento{
 	
 	override method aplicarEfecto(planta){
 		planta.aumentoAgua(10)
+		game.removeVisual(self)
 	}
 }
 

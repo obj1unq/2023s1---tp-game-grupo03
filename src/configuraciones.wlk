@@ -5,8 +5,8 @@ import plantas.*
 import entornos.*
 
 class Pantalla{
-	method iniciar()
-	{
+	
+	method iniciar(pantalla) {
 		game.clear()
 		game.addVisual(self)
 		self.configTeclas()
@@ -37,8 +37,8 @@ object menuInicial inherits Pantalla
 	
 	override method configTeclas()
 	{
-		keyboard.enter().onPressDo({ pantallaPrincipal.iniciar() })
-		keyboard.num1().onPressDo({ pantallaIntrucciones.iniciar() })
+		keyboard.enter().onPressDo({ pantallaPrincipal.iniciar(pantallaPrincipal) })
+		keyboard.num1().onPressDo({ pantallaIntrucciones.iniciar(pantallaIntrucciones) })
 	}
 	
 	override method pista()
@@ -68,9 +68,9 @@ object pantallaPrincipal inherits Pantalla
 		// keyboard.k().onPressDo( game.say(jardinero, "Los objetos son:" + game.colliders(jardinero) )		
 		
 		// Pantallas
-		keyboard.n().onPressDo( {invernaderoNocturno.iniciar()} )
-		keyboard.d().onPressDo( {invernaderoDiurno.iniciar()} )
-		keyboard.i().onPressDo( {pantallaIntrucciones.iniciar()} )
+		keyboard.n().onPressDo( {invernaderoNocturno.iniciar(self)} )
+		keyboard.d().onPressDo( {invernaderoDiurno.iniciar(self)} )
+		keyboard.i().onPressDo( {pantallaIntrucciones.iniciar(self)} )
 	
 		// Moverse
 		keyboard.up().onPressDo { jardinero.cambiarDireccion(up) }
@@ -79,19 +79,18 @@ object pantallaPrincipal inherits Pantalla
 		keyboard.right().onPressDo { jardinero.cambiarDireccion(right) }
 	}
 	
-	override method iniciar()
+	override method iniciar(pantalla)
 	{
-		super()
+		super(self)
 		game.addVisual(invernaderoDia)
 		game.addVisual(invernaderoNoche)
 		game.addVisualCharacter(jardinero)
 		//game.addVisual( pino.iconoAgua() ) // Aparecerá por encima del pino
-		game.addVisual(pino)
-		
-		
-		
-		game.addVisual(agua)
-		game.addVisual(tierra)
+		//game.addVisual(pino)
+		agua.iniciar(self)
+		tierra.iniciar(self)
+		jardinero.ambiente(self)
+		pino.iniciar(self)
 	}
 	
 	override method pista() {return musicaMenu}
@@ -104,7 +103,7 @@ object pantallaIntrucciones inherits Pantalla
 	
 	override method configTeclas()
 	{
-		keyboard.enter().onPressDo({ pantallaPrincipal.iniciar() })
+		keyboard.enter().onPressDo({ pantallaPrincipal.iniciar(pantallaPrincipal) })
 	}
 	
 	override method pista() { return musicaMenu }
@@ -115,18 +114,20 @@ class PantallaInvernadero inherits Pantalla
 {
 	override method configTeclas()
 	{
-		keyboard.c().onPressDo{ pantallaPrincipal.iniciar() }
-		keyboard.i().onPressDo{ pantallaIntrucciones.iniciar() }
+		keyboard.c().onPressDo{ pantallaPrincipal.iniciar(pantallaPrincipal) }
+		keyboard.i().onPressDo{ pantallaIntrucciones.iniciar(pantallaIntrucciones) }
 		keyboard.x().onPressDo{ jardinero.llevar(jardinero.obtenerObjetoDePosicion()) }
 		keyboard.z().onPressDo{ jardinero.dejar() }
 		keyboard.p().onPressDo{ game.say(jardinero, "Mi posición es" + jardinero.position()) }
 	}
 
-	override method iniciar()
+	override method iniciar(pantalla)
 	{
-		super()
+		super(self)
 		game.addVisualCharacter(jardinero)
-		jardinero.iniciar()
+		jardinero.iniciar(self)
+		jardinero.ambiente(self)
+		pino.iniciar(self)
 	}
 
 	override method pista()

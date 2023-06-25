@@ -117,5 +117,5 @@ class InvernaderoNocturno inherits InvernaderoDiurno {
 
 
 const exterior = new Intemperie (calor = 30, soleado = true, humedad = 40)
-const invernaderoDia = new InvernaderoDiurno(humedad = 20,calor = exterior.calor(), soleado = true, rociador = 5, tipo = "dia", position = null)
-const invernaderoNoche = new InvernaderoNocturno(humedad = 20, rociador = 10, calor = 30, tipo = "nocturno", position = null)
+const invernaderoDia = new InvernaderoDiurno(humedad = 20,calor = exterior.calor(), soleado = true, rociador = 5, tipo = "dia", position = game.at(7,3))
+const invernaderoNoche = new InvernaderoNocturno(humedad = 20, rociador = 10, calor = 30, tipo = "nocturno", position = game.at(13,3))

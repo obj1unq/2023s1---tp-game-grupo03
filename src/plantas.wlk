@@ -12,6 +12,7 @@ class Planta inherits Objeto{
 	var nivelSol = 5
 	var desarrollo = 0
 	var deterioro = 0
+	
 	method text() = "A: " + self.nivelAgua() + " | " + "T: " + self.nivelTierra() + " | " + "S: " + self.nivelSol()
 	method tipo()
 	method tiempoDeCrecimiento(){
@@ -35,6 +36,10 @@ class Planta inherits Objeto{
 	}
 	method deterioro(){
 		return deterioro
+	}
+	
+	method aplicarEfecto(planta) {		
+		game.say(self, "Ya hay una planta en esta posición.")
 	}
 	
 	method aplicarDesarrollo(cantidad)/*suma "cantidad" a la variable desarrollo*/{
@@ -150,7 +155,7 @@ class NivelDeCrecimiento{
 	}
 
 	method aplicarDesarrollo(planta){
-		planta.aplicarDesarrollo(self.deterioroaAplicar())
+		planta.aplicarDesarrollo(self.desarrolloaAplicar())
 	}
 
 	method necesidadesSatisfechas(planta){

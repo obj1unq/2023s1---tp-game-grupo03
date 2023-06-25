@@ -10,24 +10,24 @@ describe "Pantallas disponibles en juego" {
 	}
 	
 	test "Pantalla Principal" {
-		pantallaPrincipal.iniciar()
+		pantallaPrincipal.iniciar(pantallaPrincipal)
 		assert.equals("pantallaGeneral.png", pantallaPrincipal.image())
 		assert.equals(musicaMenu, pantallaPrincipal.pista())
 		assert.equals(game.origin(), pantallaPrincipal.position())
 	}
 	
 	test "Pantalla de Intrucciones" {
-		pantallaIntrucciones.iniciar()
+		pantallaIntrucciones.iniciar(pantallaIntrucciones)
 		assert.equals("instrucciones.png", pantallaIntrucciones.image())
 		assert.equals(musicaMenu, pantallaIntrucciones.pista())
 		assert.equals(game.origin(), pantallaIntrucciones.position())
 	}
 	
 	test "Pantalla Invernadero es nocturna o diurna" {
-		invernaderoNocturno.iniciar()
+		invernaderoNocturno.iniciar(pantallaPrincipal)
 		assert.equals("invernadero-interior-nocturno.png", invernaderoNocturno.image())
 		assert.equals(musicaInvernadero, invernaderoNocturno.pista())
-		invernaderoDiurno.iniciar()
+		invernaderoDiurno.iniciar(pantallaPrincipal)
 		assert.equals("invernadero-interior-dia.png", invernaderoDiurno.image())
 		assert.equals(musicaInvernadero, invernaderoDiurno.pista())
 	}
