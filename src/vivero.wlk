@@ -26,10 +26,10 @@ class Vivero
 	
 	method efecto()
 	{
-		return necesidad
+//		return necesidad
 	}
 }
-
+/* 
 class CuentaRegresiva
 	{
 		var contador = 0
@@ -65,7 +65,7 @@ class CuentaRegresiva
 				game.removeTickEvent("planta.toString()")
 			}
 		}
-
+*/
 	// Contador
 /*
 1° Debe existir un tiempo global que al avanzar aplique un efecto global a todas las plantas del juego.
