@@ -8,8 +8,6 @@
 - Francisco Salig
 - Patricio Salles
 
-## Capturas
-
 ![jardinero-right1](https://github.com/obj1unq/2023s1---tp-game-grupo03/assets/81172403/a6a77061-4b84-4b14-a95f-572c56e4d8a4)
 
 ![menuInicial](https://github.com/obj1unq/2023s1---tp-game-grupo03/assets/81172403/49d71ef0-939c-429e-82d2-110c8f563f58)
@@ -33,24 +31,24 @@ Se deberá cuidar las plantas dándoles agua y tierra, además de dejarlas al so
 
 ## Requerimientos plantas:
 ### Brote
-Tiempo a marchitarse: 7 segundos -> Si se deteriora se aumenta 33 al puntaje por deterioro
-Tiempo a crecer: 5 segundos / El puntaje ganado por desarrollo es 50
-Mínimo de Agua: 40
-Máximo de Agua: 70
-Mínimo de Tierra: 60
-Máximo de Tierra: 90
-Mínimo de Sol: 30
-Máximo de Sol: 60
+- Tiempo a marchitarse: 7 segundos -> Si se deteriora se aumenta 33 al puntaje por deterioro
+- Tiempo a crecer: 5 segundos / El puntaje ganado por desarrollo es 50
+- Mínimo de Agua: 40
+- Máximo de Agua: 70
+- Mínimo de Tierra: 60
+- Máximo de Tierra: 90
+- Mínimo de Sol: 30
+- Máximo de Sol: 60
 
 ### Intermedio
-Tiempo a marchitarse: 5 segundos -> Si se deteriora se aumenta 50 al puntaje por deterioro
-Tiempo a crecer: 7 segundos / El puntaje ganado por desarrollo es 33
-Mínimo de Agua: 40 * 1.3
-Máximo de Agua: 70 * 0.9
-Mínimo de Tierra: 60 * 1.3
-Máximo de Tierra: 90 * 0.9
-Mínimo de Sol: 30 * 1.3
-Máximo de Sol: 60 * 0.9
+- Tiempo a marchitarse: 5 segundos -> Si se deteriora se aumenta 50 al puntaje por deterioro
+- Tiempo a crecer: 7 segundos / El puntaje ganado por desarrollo es 33
+- Mínimo de Agua: 40 * 1.3
+- Máximo de Agua: 70 * 0.9
+- Mínimo de Tierra: 60 * 1.3
+- Máximo de Tierra: 90 * 0.9
+- Mínimo de Sol: 30 * 1.3
+- Máximo de Sol: 60 * 0.9
 
 ### Florecida
 - Ya no tiene necesidades, es una planta florecida! 
