@@ -1,19 +1,22 @@
 import wollok.game.*
 import extras.*
+import configuraciones.*
 
 
 class Planta inherits Objeto{
 	
-	//const property temporizador = new TemporizadorPlanta(planta=self)
 	var property estado = sana
 	var etapas = [brote, intermedio, florecida]
 	var nivelAgua
 	var nivelTierra
-	var nivelSol = 5
+	var nivelSol 
 	var desarrollo = 0
 	var deterioro = 0
+	const property temporizador = new TemporizadorPlanta(planta=self) // tiene que ser el utimo atributo porque necesita recibir a la planta ya con sus atributos definidos
+	
 	method text() = "A: " + self.nivelAgua() + " | " + "T: " + self.nivelTierra() + " | " + "S: " + self.nivelSol()
 	method tipo()
+	
 	method tiempoDeCrecimiento(){
 		return self.etapa().tiempoCrecimiento()
 	}
@@ -55,8 +58,8 @@ class Planta inherits Objeto{
 	method crecer(){
 		self.validarCrecer()
 		etapas = etapas.drop(1)
-		self.aplicarDesarrollo(0) // El valor desarrollo vuelve a cero.
-		self.aplicarDeterioro(0) // El valor deterioso vuelve a cero.
+		desarrollo = 0 //self.aplicarDesarrollo(0) // El valor desarrollo vuelve a cero.
+		deterioro = 0 //self.aplicarDeterioro(0) // El valor deterioso vuelve a cero.
 	}
 	method marchitar(){
 		estado = marchita
@@ -93,6 +96,14 @@ class Planta inherits Objeto{
 		return self.todasNecesidadesSatisfechas() and self.desarrollo() >= 99
 	}
 	
+	method recibirEfectos(){
+		//los efectos van a ser recibidos del entorno
+		//solo por ahora simplemente se le va descontar 5 a cada necesidad
+		//para que haga algo por ahora. REEMPLAZAR CUANDO YA ESTE LO DE ENTORNO
+		nivelAgua -=5
+		nivelTierra-=5
+		nivelSol-=5
+	}
 }
 
 class PlantaPatagonica inherits Planta{
