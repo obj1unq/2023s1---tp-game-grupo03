@@ -2,11 +2,11 @@
 
 ## Equipo de desarrollo
 
-- Sandoval Mauro
-- Ventola Gian Franco
-- Tatiana Rincon
-- Francisco Salig
-- Patricio Salles
+- Ventola, Gian Franco
+- Sandoval, Mauro
+- Salles, Patricio
+- Salig, Francisco
+- Rincon, Tatiana
 
 ![menuInicial](https://github.com/obj1unq/2023s1---tp-game-grupo03/assets/81172403/49d71ef0-939c-429e-82d2-110c8f563f58)
 
