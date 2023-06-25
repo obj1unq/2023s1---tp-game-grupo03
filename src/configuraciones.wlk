@@ -61,7 +61,7 @@ object pantallaPrincipal inherits Pantalla
 //		keyboard.q().onPressDo( {pino.aplicarDesarrollo(100)} )
 //      el codigo de arriba comentado lo use para probar el crecimiento de la planta ( y sus excepciones) 
 		
-/* 
+
 		// Objetos
 	    keyboard.x().onPressDo( {jardinero.llevar( jardinero.obtenerObjetoDePosicion() )} )
 		keyboard.z().onPressDo( {jardinero.dejar()} )
@@ -76,7 +76,7 @@ object pantallaPrincipal inherits Pantalla
 		keyboard.up().onPressDo { jardinero.cambiarDireccion(up) }
 		keyboard.down().onPressDo { jardinero.cambiarDireccion(down) }
 		keyboard.left().onPressDo { jardinero.cambiarDireccion(left) }
-		keyboard.right().onPressDo { jardinero.cambiarDireccion(right) }*/
+		keyboard.right().onPressDo { jardinero.cambiarDireccion(right) }
 	}
 	
 	override method iniciar()
