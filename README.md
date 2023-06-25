@@ -8,8 +8,6 @@
 - Francisco Salig
 - Patricio Salles
 
-![jardinero-right1](https://github.com/obj1unq/2023s1---tp-game-grupo03/assets/81172403/a6a77061-4b84-4b14-a95f-572c56e4d8a4)
-
 ![menuInicial](https://github.com/obj1unq/2023s1---tp-game-grupo03/assets/81172403/49d71ef0-939c-429e-82d2-110c8f563f58)
 
 ![instrucciones](https://github.com/obj1unq/2023s1---tp-game-grupo03/assets/81172403/a5c9dafc-9051-4cc2-b9f0-90ca1e03c9b9)
