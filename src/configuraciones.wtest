@@ -1,7 +1,15 @@
 import configuraciones.*
 import wollok.game.*
+import extras.*
+import plantas.*
+import personaje.*
 
 describe "Pantallas disponibles en juego" {
+	const plantaPatagonica1 = new PlantaPatagonica(estado = sana, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+	const plantaPatagonica2 = new PlantaPatagonica(estado = sana, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+	const plantaTropical1 = new PlantaTropical(estado = sana, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+	const plantaTropical2 = new PlantaTropical(estado = sana, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+	const plantaHumeda = new PlantaHumeda(estado = sana, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
 	
 	test "Pantalla de menú inicial" {
 		assert.equals("menuInicial.png", menuInicial.image())
@@ -11,7 +19,7 @@ describe "Pantallas disponibles en juego" {
 	
 	test "Pantalla Principal" {
 		pantallaPrincipal.iniciar(pantallaPrincipal)
-		assert.equals("pantallaGeneral.png", pantallaPrincipal.image())
+		assert.equals("exterior.png", pantallaPrincipal.image())
 		assert.equals(musicaMenu, pantallaPrincipal.pista())
 		assert.equals(game.origin(), pantallaPrincipal.position())
 	}
@@ -24,11 +32,50 @@ describe "Pantallas disponibles en juego" {
 	}
 	
 	test "Pantalla Invernadero es nocturna o diurna" {
-		invernaderoNocturno.iniciar(pantallaPrincipal)
+		invernaderoNocturno.iniciar(invernaderoNocturno)
 		assert.equals("invernadero-interior-nocturno.png", invernaderoNocturno.image())
 		assert.equals(musicaInvernadero, invernaderoNocturno.pista())
-		invernaderoDiurno.iniciar(pantallaPrincipal)
+		invernaderoDiurno.iniciar(invernaderoDiurno)
 		assert.equals("invernadero-interior-dia.png", invernaderoDiurno.image())
 		assert.equals(musicaInvernadero, invernaderoDiurno.pista())
+	}
+	
+	test "Se guardan elementos por pantalla en la que fueron iniciados o dejados" {
+		pantallaPrincipal.iniciar(pantallaPrincipal)
+		assert.equals(#{pino, tierra, agua}, pantallaPrincipal.elementos())
+		pino.meEstaLlevando(jardinero)
+		pino.esDejado(invernaderoDiurno)
+		assert.equals(#{pino}, invernaderoDiurno.elementos())
+		assert.equals(#{tierra, agua}, pantallaPrincipal.elementos())
+	}
+	
+	// Hay que ver si se puede probar de alguna manera el comportamiento el ganar y perder
+	
+	test "Fin de juego - Perdió" {
+		pantallaPrincipal.iniciar(pantallaPrincipal)
+		plantaTropical1.estado(marchita)
+		plantaTropical2.estado(marchita)
+		plantaHumeda.estado(marchita)
+		pantallaPrincipal.agregarElemento(plantaPatagonica1)
+		pantallaPrincipal.agregarElemento(plantaPatagonica2)
+		pantallaPrincipal.agregarElemento(plantaTropical1)
+		pantallaPrincipal.agregarElemento(plantaTropical2)
+		pantallaPrincipal.agregarElemento(plantaHumeda)
+		assert.equals(3, pantallaPrincipal.obtenerMarchitas(pantallaPrincipal.elementos().filter({elemento => elemento.esPlanta()})))
+	}
+	
+	test "Fin de juego - Ganó" {
+		pantallaPrincipal.iniciar(pantallaPrincipal)
+		plantaPatagonica1.etapas([florecida])
+		plantaPatagonica2.etapas([florecida])
+		plantaTropical1.etapas([florecida])
+		plantaTropical2.etapas([florecida])
+		plantaHumeda.etapas([florecida])
+		pantallaPrincipal.agregarElemento(plantaPatagonica1)
+		pantallaPrincipal.agregarElemento(plantaPatagonica2)
+		pantallaPrincipal.agregarElemento(plantaTropical1)
+		pantallaPrincipal.agregarElemento(plantaTropical2)
+		pantallaPrincipal.agregarElemento(plantaHumeda)
+		assert.equals(5, pantallaPrincipal.obtenerFlorecidas(pantallaPrincipal.elementos().filter({elemento => elemento.esPlanta()})))
 	}
 }

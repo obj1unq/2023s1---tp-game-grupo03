@@ -73,7 +73,7 @@ object jardinero
 	
 	method aplicarEfecto(objeto) {
 		if( game.colliders(self).size() > 1 ) {
-			objeto.aplicarEfecto(game.colliders(self).last())
+			objeto.aplicarEfecto(game.colliders(self).first())
 		}
 	}
 }

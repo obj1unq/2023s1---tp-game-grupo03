@@ -8,6 +8,10 @@ class Objeto{
 	var property meEstaLlevando = null
 	var property pantallaActual = pantallaPrincipal
 	
+	method esPlanta() {
+		return false
+	}
+	
 	method iniciar(pantalla) {
 		if (pantalla == pantallaActual) game.addVisual(self)
 	}
@@ -20,15 +24,18 @@ class Objeto{
 	
 	method esDejado(ambiente) {
 		position = meEstaLlevando.position()
+		pantallaActual.quitarElemento(self)
+		ambiente.agregarElemento(self)
 		pantallaActual = ambiente
 		meEstaLlevando = null
 	}
 	
+	method aumentoTierra(cantidad) {}
+	method aumentoAgua(cantidad) {}
 }
 
 class Elemento inherits Objeto{	
 	override method iniciar(pantalla) {
-		self.position(randomizer.emptyPosition())
 		game.addVisual(self)
 	}
 	

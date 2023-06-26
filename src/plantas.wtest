@@ -1,0 +1,40 @@
+import wollok.game.*
+import plantas.*
+import extras.*
+import configuraciones.*
+import personaje.*
+
+describe "Plantas"{
+	const plantaPatagonica1 = new PlantaPatagonica(estado = sana, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+	//const plantaPatagonica2 = new PlantaPatagonica(estado = sana, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+	const tierra = new MonticuloTierra(position = game.at(6,0))
+	const agua = new BaldeAgua(position = game.at(7,0))
+	
+	test "crecimiento por temporizador" {
+		//está en etapa brote
+		assert.equals(brote, plantaPatagonica1.etapa())
+		//no puede crecer
+		assert.notThat(plantaPatagonica1.puedeCrecer())
+		//tiene todas sus necesidades satisfechas
+		assert.that(plantaPatagonica1.todasNecesidadesSatisfechas())
+		//completa el desarrollo necesario 
+		plantaPatagonica1.aplicarDesarrollo(100)
+		//puede crecer porque tiene el desarrollo adecuado y sus necesidades satisfechas
+		assert.that(plantaPatagonica1.puedeCrecer())
+		//cuadndo se termina el tiempo de crecimiento crece
+		plantaPatagonica1.temporizador().iniciar(plantaPatagonica1.tiempoDeCrecimiento())
+		//crecio a etapa intermedia
+		assert.equals(intermedio, plantaPatagonica1.etapa())
+	}
+	
+	test "se aplican efectos de elementos sobre planta" {
+		// Nivel de tierra inicial = 75
+		game.addVisual(tierra)
+		tierra.aplicarEfecto(plantaPatagonica1)
+		assert.equals(85, plantaPatagonica1.nivelTierra())
+		// Nivel de agua inicial = 55
+		game.addVisual(agua)
+		agua.aplicarEfecto(plantaPatagonica1)
+		assert.equals(65, plantaPatagonica1.nivelAgua())
+	}
+}

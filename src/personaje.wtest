@@ -1,25 +1,25 @@
 import personaje.*
 import wollok.game.*
-import extras.*
+import plantas.*
+import configuraciones.*
 
-//describe "Manipulación de los objetos por parte del jardinero" {
-//
-//	const necesidadPlanta1 = new Necesidad(agua = 3, sol = 3, tierraAbonada = 1)
-//	const planta1 = new Planta(tipo = "planta1", estado = sana, necesidad = necesidadPlanta1, position = game.at(7, 3))
-//
+describe "Manipulación de los objetos por parte del jardinero" {
+
+	const plantaPatagonica1 = new PlantaPatagonica(estado = sana, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+	
 //	test "Llevar un objeto" {
-//		jardinero.position(game.at(7, 3))
-//		jardinero.llevar(planta1)
-//		assert.equals(planta1, jardinero.objetoEnPosesion())
-//		assert.equals(jardinero, planta1.meEstaLlevando())
+//		pantallaPrincipal.iniciar(pantallaPrincipal)
+//		jardinero.llevar(plantaPatagonica1)
+//		assert.equals(plantaPatagonica1, jardinero.objetoEnPosesion())
+//		assert.equals(jardinero, plantaPatagonica1.meEstaLlevando())
 //	}
-//	
-//	test "Dejar un objeto" {
-//		jardinero.llevar(planta1)
-//		jardinero.dejar()
-//		assert.equals(null, jardinero.objetoEnPosesion())
-//		assert.equals(null, planta1.meEstaLlevando())
-//	}
-//
-//}
+	
+	test "Dejar un objeto" {
+		pantallaPrincipal.iniciar(pantallaPrincipal)
+		jardinero.llevar(plantaPatagonica1)
+		jardinero.dejar()
+		assert.equals(null, jardinero.objetoEnPosesion())
+		assert.equals(null, plantaPatagonica1.meEstaLlevando())
+	}
+}
 
