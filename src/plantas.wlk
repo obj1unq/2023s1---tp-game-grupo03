@@ -6,13 +6,18 @@ import configuraciones.*
 class Planta inherits Objeto{
 	
 	var property estado = sana
-	var etapas = [brote, intermedio, florecida]
+	var property etapas = [brote, intermedio, florecida]
 	var nivelAgua
 	var nivelTierra
 	var nivelSol 
 	var desarrollo = 0
 	var deterioro = 0
+
 	const property temporizador = new TemporizadorPlanta(planta=self) // tiene que ser el utimo atributo porque necesita recibir a la planta ya con sus atributos definidos
+	
+	override method esPlanta() {
+		return true
+	}
 	
 	method text() = "A: " + self.nivelAgua() + " | " + "T: " + self.nivelTierra() + " | " + "S: " + self.nivelSol()
 	method tipo()
@@ -38,6 +43,10 @@ class Planta inherits Objeto{
 	}
 	method deterioro(){
 		return deterioro
+	}
+	
+	method aplicarEfecto(planta) {		
+		game.say(self, "Ya hay una planta en esta posición.")
 	}
 	
 	method aplicarDesarrollo(cantidad)/*suma "cantidad" a la variable desarrollo*/{
@@ -67,10 +76,10 @@ class Planta inherits Objeto{
 	method aumentoSol(cantidad){
 		nivelSol += cantidad
 	}
-	method aumentoAgua(cantidad){
+	override method aumentoAgua(cantidad){
 		nivelAgua += cantidad
 	}
-	method aumentoTierra(cantidad){
+	override method aumentoTierra(cantidad){
 		nivelTierra += cantidad
 	}
 	
@@ -161,7 +170,7 @@ class NivelDeCrecimiento{
 	}
 
 	method aplicarDesarrollo(planta){
-		planta.aplicarDesarrollo(self.deterioroaAplicar())
+		planta.aplicarDesarrollo(self.desarrolloaAplicar())
 	}
 
 	method necesidadesSatisfechas(planta){

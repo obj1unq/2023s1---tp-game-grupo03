@@ -3,16 +3,73 @@ import personaje.*
 import extras.*
 import plantas.*
 import entornos.*
+import randomizer.*
 
 class Pantalla{
-	method iniciar()
-	{
+	const property elementos = #{}
+	
+	method iniciar(pantalla) {
 		game.clear()
 		game.addVisual(self)
 		self.configTeclas()
 		rocola.cambiarTrack(self.pista())
 	}
 	
+	method agregarElemento(elemento) {
+		elementos.add(elemento)
+	}
+
+	method quitarElemento(elemento) {
+		elementos.remove(elemento)
+	}
+	
+	method chequearEstadoDelJuegoParaFinalizacion() {
+		game.onTick(5000, "FIN_JUEGO", {self.finalizarJuego()})
+	}
+	
+	// Objeto que maneja el fin del juego.. 
+	// Falta validar en el conjunto de elementos de la pantalla que cuando haya 5 florecidas
+	// gane o 3 marchitas pierda
+	method finalizarJuego() {
+		const plantas = elementos.filter({elemento => elemento.esPlanta()})
+		if (self.obtenerFlorecidas(plantas) >= 5 && self.obtenerMarchitas(plantas) < 3) {
+			self.ganar()
+		} else if (self.obtenerMarchitas(plantas) >= 3) {
+			self.perder()
+		}
+	}
+	
+	method obtenerFlorecidas(plantas) {
+		return plantas.filter({planta => planta.etapa() == florecida}).size()
+	}
+	
+	method obtenerMarchitas(plantas) {
+		return plantas.filter({planta => planta.estado() == marchita}).size()
+	}
+	
+	method removerEventos() {
+		game.removeTickEvent("CUENTA_REGRESIVA")
+		game.removeTickEvent("NUEVAS_PLANTAS")
+		game.removeTickEvent("NUEVOS_ELEMENTOS")
+		game.removeTickEvent("FIN_JUEGO")
+	}
+	
+	method cerrarJuego() {
+		game.schedule(3000, {game.stop()})
+	}
+	
+	method ganar() {
+		self.removerEventos()
+		game.say(jardinero, "¡Felicitaciones! ¡GANASTE!")
+		self.cerrarJuego()
+	}
+	
+	method perder() {
+		self.removerEventos()
+		game.say(jardinero, "Game Over")
+		self.cerrarJuego()
+	}
+		
 	// Siempre es la misma posicion de fondo
 	method position()
 	{
@@ -37,8 +94,8 @@ object menuInicial inherits Pantalla
 	
 	override method configTeclas()
 	{
-		keyboard.enter().onPressDo({ pantallaPrincipal.iniciar() })
-		keyboard.num1().onPressDo({ pantallaIntrucciones.iniciar() })
+		keyboard.enter().onPressDo({ pantallaPrincipal.iniciar(pantallaPrincipal) })
+		keyboard.num1().onPressDo({ pantallaIntrucciones.iniciar(pantallaIntrucciones) })
 	}
 	
 	override method pista()
@@ -51,6 +108,8 @@ object menuInicial inherits Pantalla
 object pantallaPrincipal inherits Pantalla
 {
 	var property image = "exterior.png"
+	
+	
 	
 	override method configTeclas()
 	{
@@ -68,9 +127,9 @@ object pantallaPrincipal inherits Pantalla
 		// keyboard.k().onPressDo( game.say(jardinero, "Los objetos son:" + game.colliders(jardinero) )		
 		
 		// Pantallas
-		keyboard.n().onPressDo( {invernaderoNocturno.iniciar()} )
-		keyboard.d().onPressDo( {invernaderoDiurno.iniciar()} )
-		keyboard.i().onPressDo( {pantallaIntrucciones.iniciar()} )
+		keyboard.n().onPressDo( {invernaderoNocturno.iniciar(self)} )
+		keyboard.d().onPressDo( {invernaderoDiurno.iniciar(self)} )
+		keyboard.i().onPressDo( {pantallaIntrucciones.iniciar(self)} )
 	
 		// Moverse
 		keyboard.up().onPressDo { jardinero.cambiarDireccion(up) }
@@ -79,23 +138,23 @@ object pantallaPrincipal inherits Pantalla
 		keyboard.right().onPressDo { jardinero.cambiarDireccion(right) }
 	}
 	
-	override method iniciar()
-	{
-		super()
+	override method iniciar(pantalla) {
+		super(self)
 		//game.addVisual(invernaderoDia)
 		//game.addVisual(invernaderoNoche)
 		game.addVisualCharacter(jardinero)
 		//game.addVisual( pino.iconoAgua() ) // Aparecerá por encima del pino
-		game.addVisual(pino)
+		self.agregarElemento(pino)
+		self.agregarElemento(agua)
+		self.agregarElemento(tierra)
+		jardinero.ambiente(self)
+		elementos.forEach({elemento => elemento.iniciar(self)})
+
 		
 		/*el timer se inicia cuando se esta en el exterior y en los invernadores
 		 se inicia en esas pantallas por el game.clear, en el menu de intrucciones no
 		 se ejecuta para que no siga corriendo el tiempo*/
-		timer.iniciar()
-		
-		
-		game.addVisual(agua)
-		game.addVisual(tierra)
+		timer.iniciar(self)
 	}
 	
 	override method pista() {return musicaMenu}
@@ -108,7 +167,7 @@ object pantallaIntrucciones inherits Pantalla
 	
 	override method configTeclas()
 	{
-		keyboard.enter().onPressDo({ pantallaPrincipal.iniciar() })
+		keyboard.enter().onPressDo({ pantallaPrincipal.iniciar(pantallaPrincipal) })
 	}
 	
 	override method pista() { return musicaMenu }
@@ -119,19 +178,21 @@ class PantallaInvernadero inherits Pantalla
 {
 	override method configTeclas()
 	{
-		keyboard.c().onPressDo{ pantallaPrincipal.iniciar() }
-		keyboard.i().onPressDo{ pantallaIntrucciones.iniciar() }
+		keyboard.c().onPressDo{ pantallaPrincipal.iniciar(pantallaPrincipal) }
+		keyboard.i().onPressDo{ pantallaIntrucciones.iniciar(pantallaIntrucciones) }
 		keyboard.x().onPressDo{ jardinero.llevar(jardinero.obtenerObjetoDePosicion()) }
 		keyboard.z().onPressDo{ jardinero.dejar() }
 		keyboard.p().onPressDo{ game.say(jardinero, "Mi posición es" + jardinero.position()) }
 	}
 
-	override method iniciar()
+	override method iniciar(pantalla)
 	{
-		super()
+		super(self)
 		game.addVisualCharacter(jardinero)
-		jardinero.iniciar()
-		timer.iniciar()
+		jardinero.iniciar(self)
+		jardinero.ambiente(self)
+		elementos.forEach({elemento => elemento.iniciar(self)})
+		timer.iniciar(self)
 	}
 
 	override method pista()
@@ -158,7 +219,7 @@ object rocola
 	
 	var track = musicaMenu.sonido()
 	
-	method iniciar()
+	method iniciar(rocola)
 	{
 		track.shouldLoop(true)
 		track.volume(0.2)
@@ -180,7 +241,7 @@ object rocola
 		}
 		else
 		{
-			self.iniciar()
+			self.iniciar(self)
 		}
 	}
 	
@@ -235,16 +296,45 @@ object timer{
 		plantas.remove(planta)
 	}
 	
-	method iniciar(){
+	method iniciar(pantalla) {
+		const randomNumber = new Range(start = 0, end = 2).anyOne()
 		game.onTick(ticks, "CUENTA_REGRESIVA",{self.iniciarCuentasRegresivas() })
+		if (!pantalla.equals(invernaderoNocturno) && !pantalla.equals(invernaderoDiurno)) {			
+			game.onTick(10000, "NUEVAS_PLANTAS", {self.nacerNuevaPlanta(randomNumber, pantalla)})
+			game.onTick(8000, "NUEVOS_ELEMENTOS", {self.nacerNuevosElementos(pantalla)})
+		}
+		pantalla.chequearEstadoDelJuegoParaFinalizacion()
 	}
 	
 	method iniciarCuentasRegresivas(){
 		plantas.forEach{planta=>planta.temporizador().iniciar(ticks)}
 	}
+	
+	method nacerNuevaPlanta(randomNumber, pantalla) {
+		var nuevaPlanta
+		if (randomNumber == 0) {			
+			nuevaPlanta = new PlantaPatagonica(estado = sana, position = randomizer.emptyPosition(), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+		} else if (randomNumber == 1) {			
+			nuevaPlanta = new PlantaHumeda(estado = sana, position = randomizer.emptyPosition(), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+		} else {			
+			nuevaPlanta = new PlantaTropical(estado = sana, position = randomizer.emptyPosition(), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+		}
+		self.agregarPlanta(nuevaPlanta)
+		pantalla.agregarElemento(nuevaPlanta)
+		game.addVisual(nuevaPlanta)
+	}
+	
+	method nacerNuevosElementos(pantalla) {
+		const tierra = new MonticuloTierra(position = randomizer.emptyPosition())
+		const agua = new BaldeAgua(position = randomizer.emptyPosition())
+		tierra.iniciar(pantalla)
+		agua.iniciar(pantalla)
+		pantalla.agregarElemento(tierra)
+		pantalla.agregarElemento(agua)
+	}
 }
 
-class TemporizadorPlanta{
+class TemporizadorPlanta {
 	const planta
 	var tiempoBase = 3000 //3 seg
 	var contadorCrecer = planta.tiempoDeCrecimiento()

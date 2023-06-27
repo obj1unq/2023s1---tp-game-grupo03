@@ -1,13 +1,16 @@
-  import wollok.game.*
+import wollok.game.*
+import configuraciones.*
 
 object jardinero
 {
 	var property position = game.at(3, 3)
 	var property direccion = right
 	var property objetoEnPosesion = null
-
-	method iniciar()
+	var property ambiente = pantallaPrincipal
+	
+	method iniciar(pantalla)
 	{
+		ambiente = pantalla
 		if( objetoEnPosesion != null )
 		{
 			game.addVisual(objetoEnPosesion)
@@ -46,33 +49,31 @@ object jardinero
 
 	method llevar(objeto)
 	{
-		if( self.validarSiPuedeLlevar(objeto) )
+		if( self.puedeLlevar(objeto) )
 		{
 			objeto.meEstaLlevando(self)
 			objetoEnPosesion = objeto
 		}
 	}
 
-	method validarSiPuedeLlevar(objeto)
+	method puedeLlevar(objeto)
 	{
 		return objeto != self && position == objeto.position() && objetoEnPosesion == null
 	}
 
 	method dejar()
 	{
-		self.validarSiPuedeDejar()
+		self.aplicarEfecto(objetoEnPosesion)
 		if( objetoEnPosesion != null and game.colliders(self).size() < 2 )
 		{
-			objetoEnPosesion.esDejado()
+			objetoEnPosesion.esDejado(ambiente)
 			objetoEnPosesion = null
 		}
 	}
 	
-	method validarSiPuedeDejar()
-	{
-		if( game.colliders(self).size() > 1 )
-		{
-			game.say(self, "Ya hay un objeto en esta posición.")
+	method aplicarEfecto(objeto) {
+		if( game.colliders(self).size() > 1 ) {
+			objeto.aplicarEfecto(game.colliders(self).first())
 		}
 	}
 }
