@@ -9,17 +9,41 @@ class Planta inherits Objeto{
 	var property etapas = [brote, intermedio, florecida]
 	var nivelAgua
 	var nivelTierra
-	var nivelSol 
+	var nivelSol
 	var desarrollo = 0
 	var deterioro = 0
 
 	const property temporizador = new TemporizadorPlanta(planta=self) // tiene que ser el utimo atributo porque necesita recibir a la planta ya con sus atributos definidos
 	
+	var property indicadorDeficitAgua = new IndicadorDeficitAgua( planta = self, position = self.position(), meEstaLlevando = self )
+	var property indicadorExcesoAgua = new IndicadorExcesoAgua( planta = self, position = self.position(), meEstaLlevando = self )
+	var property indicadorDeficitSol = new IndicadorDeficitSol( planta = self, position = self.position(), meEstaLlevando = self )
+	var property indicadorExcesoSol = new IndicadorExcesoSol( planta = self, position = self.position(), meEstaLlevando = self )
+	var property indicadorDeficitTierra = new IndicadorDeficitTierra( planta = self, position = self.position(), meEstaLlevando = self )
+	var property indicadorExcesoTierra = new IndicadorExcesoTierra( planta = self, position = self.position(), meEstaLlevando = self )
+
+	method actualizarNecesidades()
+	{
+		const necesidades = #{indicadorDeficitAgua, indicadorExcesoAgua, indicadorDeficitSol, indicadorExcesoSol, indicadorDeficitTierra, indicadorExcesoTierra}
+		necesidades.forEach({ necesidad => necesidad.iniciar() })
+	}
+	
+	override 	method iniciar(pantalla)
+	{
+		if( pantalla == self.pantallaActual() )
+		{
+			self.quitarSiExiste(self)
+			self.actualizarNecesidades()
+			game.addVisual(self)
+		}	
+	}
+
 	override method esPlanta() {
 		return true
 	}
 	
-	method text() = "A: " + self.nivelAgua() + " | " + "T: " + self.nivelTierra() + " | " + "S: " + self.nivelSol()
+	method text() // = "A: " + self.nivelAgua() + " | " + "T: " + self.nivelTierra() + " | " + "S: " + self.nivelSol()
+	
 	method tipo()
 	
 	method tiempoDeCrecimiento(){
@@ -45,9 +69,11 @@ class Planta inherits Objeto{
 		return deterioro
 	}
 	
+	/*
 	method aplicarEfecto(planta) {		
 		game.say(self, "Ya hay una planta en esta posición.")
 	}
+	*/
 	
 	method aplicarDesarrollo(cantidad)/*suma "cantidad" a la variable desarrollo*/{
 		desarrollo += cantidad
