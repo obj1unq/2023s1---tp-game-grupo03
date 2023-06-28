@@ -37,15 +37,21 @@ object jardinero
 		position = direccion.move(self)
 	}
 
+
 	method obtenerObjetoDePosicion()
 	{
 		const objetos = game.colliders(self)
-		return if( objetos.size() > 0 )
+		return if( objetos.any( {objeto => objeto.esPlanta()} ) )
+		{
+			objetos.find( {objeto => objeto.esPlanta()} )
+		} 
+		else if( objetos.size() > 0 )
 		{
 			objetos.first()
-		} 
+		}
 		else self
 	}
+
 
 	method llevar(objeto)
 	{
@@ -64,18 +70,38 @@ object jardinero
 	method dejar()
 	{
 		self.aplicarEfecto(objetoEnPosesion)
-		if( objetoEnPosesion != null and game.colliders(self).size() < 2 )
+		if( objetoEnPosesion != null and self.objetosQueNoSonNecesidad().size() < 2 )
 		{
 			objetoEnPosesion.esDejado(ambiente)
 			objetoEnPosesion = null
 		}
+		else
+		{
+			self.error("No hará ningún efecto")
+		}
 	}
 	
+	method objetosQueNoSonNecesidad()
+	{
+		return game.colliders(self).filter({objeto => not objeto.esNecesidad()} )
+	}
+	
+	
+	method aplicarEfecto(objeto)
+	{
+		if( game.colliders(self).any({elemento => elemento.esPlanta()}) and not objeto.esPlanta()  )
+		{
+			objeto.aplicarEfecto(game.colliders(self).find( {elemento => elemento.esPlanta()} ))
+		}
+	}
+	
+	/*
 	method aplicarEfecto(objeto) {
 		if( game.colliders(self).size() > 1 ) {
 			objeto.aplicarEfecto(game.colliders(self).first())
 		}
 	}
+	*/
 }
 
 object right {

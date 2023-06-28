@@ -145,8 +145,8 @@ object pantallaPrincipal inherits Pantalla
 		game.addVisualCharacter(jardinero)
 		//game.addVisual( pino.iconoAgua() ) // Aparecerá por encima del pino
 		self.agregarElemento(pino)
-		self.agregarElemento(agua)
-		self.agregarElemento(tierra)
+		// self.agregarElemento(agua)
+		// self.agregarElemento(tierra) 
 		jardinero.ambiente(self)
 		elementos.forEach({elemento => elemento.iniciar(self)})
 
@@ -298,7 +298,7 @@ object timer{
 	
 	method iniciar(pantalla) {
 		const randomNumber = new Range(start = 0, end = 2).anyOne()
-		game.onTick(ticks, "CUENTA_REGRESIVA",{self.iniciarCuentasRegresivas() })
+		game.onTick(ticks, "CUENTA_REGRESIVA",{self.iniciarCuentasRegresivas(pantalla) })
 		if (!pantalla.equals(invernaderoNocturno) && !pantalla.equals(invernaderoDiurno)) {			
 			game.onTick(10000, "NUEVAS_PLANTAS", {self.nacerNuevaPlanta(randomNumber, pantalla)})
 			game.onTick(8000, "NUEVOS_ELEMENTOS", {self.nacerNuevosElementos(pantalla)})
@@ -306,7 +306,8 @@ object timer{
 		pantalla.chequearEstadoDelJuegoParaFinalizacion()
 	}
 	
-	method iniciarCuentasRegresivas(){
+	method iniciarCuentasRegresivas(pantalla){
+		plantas.forEach( {planta => planta.iniciar(pantalla)} )
 		plantas.forEach{planta=>planta.temporizador().iniciar(ticks)}
 	}
 	
@@ -347,6 +348,8 @@ class TemporizadorPlanta {
 		self.iniciarCrecerSiPuede(ticks)
 		self.iniciarMarchitarSiPuede(ticks)
 	}
+	
+
 	
 	//CRECIMIENTO O DESARROLLO
 	method iniciarCrecerSiPuede(ticks){

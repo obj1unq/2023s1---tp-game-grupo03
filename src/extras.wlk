@@ -3,16 +3,24 @@ import plantas.*
 import configuraciones.*
 import randomizer.*
 
-class Objeto{
+class Objeto
+{
 	var property position
 	var property meEstaLlevando = null
 	var property pantallaActual = pantallaPrincipal
 	
-	method esPlanta() {
+	method esPlanta()
+	{
 		return false
 	}
 	
-	method iniciar(pantalla) {
+	method esNecesidad()
+	{
+		return false
+	}
+	
+	method iniciar(pantalla)
+	{
 		if (pantalla == pantallaActual) game.addVisual(self)
 	}
 	
@@ -22,6 +30,22 @@ class Objeto{
 		return if( meEstaLlevando != null ) meEstaLlevando.position() else position
 	}
 	
+	method quitarSiExiste(objeto)
+	{
+		if( game.hasVisual(objeto) )
+		{
+			game.removeVisual(objeto)
+		}
+	}
+	
+	method agregarSiNoExiste(objeto)
+	{
+		if( not game.hasVisual(objeto) )
+		{
+			game.addVisual(objeto)
+		}
+	}
+
 	method esDejado(ambiente) {
 		position = meEstaLlevando.position()
 		pantallaActual.quitarElemento(self)
@@ -94,9 +118,6 @@ object paleta
 	const property azul = "032EFFF7"
 }
 
-const tierra = new MonticuloTierra(position = game.at(6,0))
-const agua = new BaldeAgua(position = game.at(7,0))
-
 //Esto estaba comentado en la clase Planta. No lo borro todavia
 /*
 	 - Si la planta tiene una necesidad, 
@@ -127,3 +148,147 @@ const agua = new BaldeAgua(position = game.at(7,0))
 	}
 */
 
+
+// Indicadores de necesidad, (cada indicador es un objeto que se genera dentro de la clase Planta).
+class Necesidad inherits Objeto
+{
+	const planta
+	method iniciar()
+	
+	override method esPlanta()
+	{
+		return false
+	}
+	
+	override method esNecesidad()
+	{
+		return true
+	}
+}
+
+
+class IndicadorExcesoAgua inherits Necesidad
+{
+	override method image()
+	{
+		return "excesoAgua.png"
+	}
+	
+	override method iniciar()
+	{
+		if( planta.nivelAgua() > planta.etapa().maximoAgua() )
+		{
+			self.agregarSiNoExiste( planta.indicadorExcesoAgua() )		
+		}
+		else
+		{
+			self.quitarSiExiste(planta.indicadorExcesoAgua())
+		}
+	}
+}
+
+
+
+class IndicadorDeficitAgua inherits Necesidad
+{
+	override method image()
+	{
+		return "deficitAgua.png"
+	}
+	
+	override method iniciar()
+	{
+		if( planta.nivelAgua() < planta.etapa().minimoAgua() )
+		{
+			self.agregarSiNoExiste( planta.indicadorDeficitAgua() )
+		}
+		else
+		{
+			self.quitarSiExiste(planta.indicadorDeficitAgua())
+		}
+	}
+}
+
+
+class IndicadorExcesoSol inherits Necesidad
+{
+	override method image()
+	{
+		return "excesoSol.png"
+	}
+	
+	override method iniciar()
+	{
+		if( planta.nivelSol() > planta.etapa().maximoSol() )
+		{
+			self.agregarSiNoExiste( planta.indicadorExcesoSol() )
+		}
+		else
+		{
+			self.quitarSiExiste(planta.indicadorExcesoSol())
+		}
+	}
+}
+
+
+class IndicadorDeficitSol inherits Necesidad
+{
+	override method image()
+	{
+		return "deficitSol.png"
+	}
+	
+	override method iniciar()
+	{
+		if( planta.nivelSol() < planta.etapa().minimoSol() )
+		{
+			self.agregarSiNoExiste( planta.indicadorDeficitSol() )
+		}
+		else
+		{
+			self.quitarSiExiste(planta.indicadorDeficitSol())
+		}
+	}
+}
+
+
+class IndicadorExcesoTierra inherits Necesidad
+{
+	override method image()
+	{
+		return "excesoTierra.png"
+	}
+	
+	override method iniciar()
+	{
+		if( planta.nivelTierra() > planta.etapa().maximoTierra() )
+		{
+			self.agregarSiNoExiste( planta.indicadorExcesoTierra() )
+		}
+		else
+		{
+			self.quitarSiExiste(planta.indicadorExcesoTierra())
+		}
+	}
+}
+
+
+class IndicadorDeficitTierra inherits Necesidad
+{
+	override method image()
+	{
+		return "deficitTierra.png"
+	}
+	
+	override method iniciar()
+	{
+		if( planta.nivelTierra() < planta.etapa().minimoTierra() )
+		{
+			self.agregarSiNoExiste( planta.indicadorDeficitTierra() )
+		}
+		else
+		{
+			self.quitarSiExiste(planta.indicadorDeficitTierra())
+		}
+	}
+}
