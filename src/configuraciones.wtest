@@ -5,11 +5,13 @@ import plantas.*
 import personaje.*
 
 describe "Pantallas disponibles en juego" {
-	const plantaPatagonica1 = new PlantaPatagonica(estado = sana, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
-	const plantaPatagonica2 = new PlantaPatagonica(estado = sana, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
-	const plantaTropical1 = new PlantaTropical(estado = sana, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
-	const plantaTropical2 = new PlantaTropical(estado = sana, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
-	const plantaHumeda = new PlantaHumeda(estado = sana, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+	const plantaPatagonica1 = new PlantaPatagonica(esSana = true, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+	const plantaPatagonica2 = new PlantaPatagonica(esSana = true, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+	const plantaTropical1 = new PlantaTropical(esSana = true, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+	const plantaTropical2 = new PlantaTropical(esSana = true, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+	const plantaHumeda = new PlantaHumeda(esSana = true, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+	const tierra = new MonticuloTierra(position = game.at(6,0))
+	const agua = new BaldeAgua(position = game.at(7,0))
 	
 	test "Pantalla de menú inicial" {
 		assert.equals("menuInicial.png", menuInicial.image())
@@ -18,30 +20,32 @@ describe "Pantallas disponibles en juego" {
 	}
 	
 	test "Pantalla Principal" {
-		pantallaPrincipal.iniciar(pantallaPrincipal)
+		pantallaPrincipal.iniciar()
 		assert.equals("exterior.png", pantallaPrincipal.image())
 		assert.equals(musicaMenu, pantallaPrincipal.pista())
 		assert.equals(game.origin(), pantallaPrincipal.position())
 	}
 	
 	test "Pantalla de Intrucciones" {
-		pantallaIntrucciones.iniciar(pantallaIntrucciones)
+		pantallaIntrucciones.iniciar()
 		assert.equals("instrucciones.png", pantallaIntrucciones.image())
 		assert.equals(musicaMenu, pantallaIntrucciones.pista())
 		assert.equals(game.origin(), pantallaIntrucciones.position())
 	}
 	
 	test "Pantalla Invernadero es nocturna o diurna" {
-		invernaderoNocturno.iniciar(invernaderoNocturno)
+		invernaderoNocturno.iniciar()
 		assert.equals("invernadero-interior-nocturno.png", invernaderoNocturno.image())
 		assert.equals(musicaInvernadero, invernaderoNocturno.pista())
-		invernaderoDiurno.iniciar(invernaderoDiurno)
+		invernaderoDiurno.iniciar()
 		assert.equals("invernadero-interior-dia.png", invernaderoDiurno.image())
 		assert.equals(musicaInvernadero, invernaderoDiurno.pista())
 	}
 	
 	test "Se guardan elementos por pantalla en la que fueron iniciados o dejados" {
-		pantallaPrincipal.iniciar(pantallaPrincipal)
+		pantallaPrincipal.agregarElemento(tierra)
+		pantallaPrincipal.agregarElemento(agua)
+		pantallaPrincipal.iniciar()
 		assert.equals(#{pino, tierra, agua}, pantallaPrincipal.elementos())
 		pino.meEstaLlevando(jardinero)
 		pino.esDejado(invernaderoDiurno)
@@ -52,10 +56,10 @@ describe "Pantallas disponibles en juego" {
 	// Hay que ver si se puede probar de alguna manera el comportamiento el ganar y perder
 	
 	test "Fin de juego - Perdió" {
-		pantallaPrincipal.iniciar(pantallaPrincipal)
-		plantaTropical1.estado(marchita)
-		plantaTropical2.estado(marchita)
-		plantaHumeda.estado(marchita)
+		pantallaPrincipal.iniciar()
+		plantaTropical1.esSana(false)
+		plantaTropical2.esSana(false)
+		plantaHumeda.esSana(false)
 		pantallaPrincipal.agregarElemento(plantaPatagonica1)
 		pantallaPrincipal.agregarElemento(plantaPatagonica2)
 		pantallaPrincipal.agregarElemento(plantaTropical1)
@@ -65,7 +69,7 @@ describe "Pantallas disponibles en juego" {
 	}
 	
 	test "Fin de juego - Ganó" {
-		pantallaPrincipal.iniciar(pantallaPrincipal)
+		pantallaPrincipal.iniciar()
 		plantaPatagonica1.etapas([florecida])
 		plantaPatagonica2.etapas([florecida])
 		plantaTropical1.etapas([florecida])

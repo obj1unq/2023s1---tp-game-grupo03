@@ -5,7 +5,7 @@ import configuraciones.*
 
 describe "Manipulación de los objetos por parte del jardinero" {
 
-	const plantaPatagonica1 = new PlantaPatagonica(estado = sana, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+	const plantaPatagonica1 = new PlantaPatagonica(esSana = true, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
 	
 	test "Jardinero cambia de dirección" {
 		assert.equals(right, jardinero.direccion())
@@ -25,7 +25,7 @@ describe "Manipulación de los objetos por parte del jardinero" {
 	}
 	
 	test "El jardinero puede llevar un objeto" {
-		pantallaPrincipal.iniciar(pantallaPrincipal)
+		pantallaPrincipal.iniciar()
 		assert.equals(game.at(3, 3), jardinero.position())
 		assert.notThat(jardinero.puedeLlevar(plantaPatagonica1))
 		jardinero.position(game.at(5,0))
@@ -36,7 +36,7 @@ describe "Manipulación de los objetos por parte del jardinero" {
 	}
 	
 	test "El jardinero puede dejar un objeto" {
-		pantallaPrincipal.iniciar(pantallaPrincipal)
+		pantallaPrincipal.iniciar()
 		jardinero.position(game.at(5,0))
 		assert.that(jardinero.puedeLlevar(plantaPatagonica1))
 		jardinero.llevar(plantaPatagonica1)

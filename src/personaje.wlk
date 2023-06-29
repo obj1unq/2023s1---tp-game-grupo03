@@ -14,6 +14,7 @@ object jardinero
 		if( objetoEnPosesion != null )
 		{
 			game.addVisual(objetoEnPosesion)
+			objetoEnPosesion.actualizarNecesidades(pantalla)
 		}
 	}
 	
@@ -69,9 +70,10 @@ object jardinero
 
 	method dejar()
 	{
-		self.aplicarEfecto(objetoEnPosesion)
-		if( objetoEnPosesion != null and self.objetosQueNoSonNecesidad().size() < 2 )
+		
+		if( objetoEnPosesion != null and self.objetosQueNoSonNecesidad().size() <= 2 )
 		{
+			self.aplicarEfecto(objetoEnPosesion)
 			objetoEnPosesion.esDejado(ambiente)
 			objetoEnPosesion = null
 		}
