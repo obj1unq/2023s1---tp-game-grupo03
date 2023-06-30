@@ -51,6 +51,41 @@ Se deberá cuidar las plantas dándoles agua y tierra, además de dejarlas al so
 ### Florecida
 - Ya no tiene necesidades, es una planta florecida! 
 
+## Entornos:
+Los 3 entornos se ven afectados por las condiciones del exterior: calor = 10, humedad = 4 y si es o no un día caluroso. Cada entorno aportará una cantidad de sol, tierra y agua diferente.
+Los invernaderos por su parte también tienen un rociador que está activado en el invernadero diurno y no en el nocturno, y además se ven afectados por un "sol de invernadero".
+
+### Intemperie
+- Sol que aporta:
+  - Si es un día caluroso: 10
+  - Si no es día caluroso: 3
+- Agua que aporta:
+  - Si es un día caluroso: - 4
+  - Si no es día caluroso: 4
+- Tierra que aporta:
+  - Si es un día caluroso: - 5
+  - Si no es día caluroso: 6
+    
+### Invernadero Diurno
+- Sol de invernadero: Devuelve un número random entre 1 y 4
+- Sol que aporta:
+  - Si es un día caluroso: 10 + sol de invernadero
+  - Si no es día caluroso: 3 + sol de invernadero
+- Agua que aporta:
+  - Si es un día caluroso: 4
+  - Si no es día caluroso: 4
+- Tierra que aporta: - 3
+    
+### Invernadero Nocturno
+- Sol de invernadero: Devuelve 0
+- Sol que aporta:
+  - Si es un día caluroso: -10
+  - Si no es día caluroso: -3
+- Agua que aporta:
+  - Si es un día caluroso: 4
+  - Si no es día caluroso: 12
+- Tierra que aporta: 3
+    
 ## Condiciones Fin de Juego:
 ### Para ganar
 - Si llegas a tener 3 o más plantas florecidas y menos de 4 plantas marchitas, ganarás el juego!
