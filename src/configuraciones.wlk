@@ -30,9 +30,9 @@ class Pantalla {
 
 	method finalizarJuego() {
 		const plantas = elementos.filter({ elemento => elemento.esPlanta() })
-		if (self.obtenerFlorecidas(plantas) >= 5 && self.obtenerMarchitas(plantas) < 3) {
+		if (self.obtenerFlorecidas(plantas) >= 3 && self.obtenerMarchitas(plantas) < 4) {
 			self.ganar()
-		} else if (self.obtenerMarchitas(plantas) >= 3) {
+		} else if (self.obtenerMarchitas(plantas) >= 4) {
 			self.perder()
 		}
 	}
@@ -45,25 +45,18 @@ class Pantalla {
 		return plantas.filter({ planta => not planta.esSana() }).size()
 	}
 
-	method removerEventos() {
-		game.removeTickEvent("CUENTA_REGRESIVA")
-		game.removeTickEvent("NUEVAS_PLANTAS")
-		game.removeTickEvent("NUEVOS_ELEMENTOS")
-		game.removeTickEvent("FIN_JUEGO")
-	}
-
 	method cerrarJuego() {
 		game.schedule(3000, { game.stop()})
 	}
 
 	method ganar() {
-		self.removerEventos()
+		timer.removerEventos(self)
 		game.say(jardinero, "¡Felicitaciones! ¡GANASTE!")
 		self.cerrarJuego()
 	}
 
 	method perder() {
-		self.removerEventos()
+		timer.removerEventos(self)
 		game.say(jardinero, "Game Over")
 		self.cerrarJuego()
 	}
@@ -204,7 +197,7 @@ object rocola {
 
 	var track = musicaMenu.sonido()
 
-	method iniciar(rocola) {
+	method iniciar() {
 		track.shouldLoop(true)
 		track.volume(0.2)
 		game.schedule(100, { track.play()})
@@ -220,7 +213,7 @@ object rocola {
 				self.reproducirTrack()
 			}
 		} else {
-			self.iniciar(self)
+			self.iniciar()
 		}
 	}
 
@@ -279,6 +272,15 @@ object timer {
 			game.onTick(8000, "NUEVOS_ELEMENTOS", { self.aparecerNuevosElementos(pantalla)})
 		}
 		pantalla.chequearEstadoDelJuegoParaFinalizacion()
+	}
+	
+	method removerEventos(pantalla) {
+		if (pantalla.equals(pantallaPrincipal)) {
+			game.removeTickEvent("CUENTA_REGRESIVA")
+			game.removeTickEvent("NUEVAS_PLANTAS")
+			game.removeTickEvent("NUEVOS_ELEMENTOS")	
+		}
+		game.removeTickEvent("FIN_JUEGO")
 	}
 
 	method iniciarCuentasRegresivas(pantalla) {
