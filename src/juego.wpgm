@@ -5,17 +5,11 @@ import plantas.*
 import entornos.*
 import configuraciones.*
 
-program juego
-{
+program juego {
 	game.title("WollokPlant")
 	game.height(9.6)
 	game.width(16)
-
-	
 	game.boardGround("menuInicial.png")
-	
-	menuInicial.iniciar(menuInicial)
-	
+	menuInicial.iniciar()
 	game.start()
-	
 }
