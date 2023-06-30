@@ -73,6 +73,20 @@ object jardinero {
 			objeto.aplicarEfecto(game.colliders(self).find({ elemento => elemento.esPlanta()}))
 		}
 	}
+	
+	method plantaActual()
+	{
+		return if( game.colliders(self).any({objetos => objetos.esPlanta()}) )
+		{
+			game.colliders(self).find({objetos => objetos.esPlanta()})	
+		}
+		else
+		{
+			self.error("Aquí no hay ninguna planta")
+		}
+	}
+	
+
 
 /*
  * method aplicarEfecto(objeto) {
