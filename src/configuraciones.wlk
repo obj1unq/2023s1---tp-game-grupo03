@@ -109,6 +109,10 @@ object pantallaPrincipal inherits Pantalla
 {
 	var property image = "exterior.png"
 	
+	method tipo() {
+		return exterior
+	}
+	
 	
 	
 	override method configTeclas()
@@ -148,6 +152,7 @@ object pantallaPrincipal inherits Pantalla
 		// self.agregarElemento(agua)
 		// self.agregarElemento(tierra) 
 		jardinero.ambiente(self)
+		jardinero.iniciar(self)
 		elementos.forEach({elemento => elemento.iniciar(self)})
 
 		
@@ -205,12 +210,20 @@ class PantallaInvernadero inherits Pantalla
 object invernaderoNocturno inherits PantallaInvernadero
 {
 	var property image = "invernadero-interior-nocturno.png"
+	
+	method tipo() {
+		return invernaderoNoche
+	}
 }
 
 
 object invernaderoDiurno inherits PantallaInvernadero
 {
 	var property image = "invernadero-interior-dia.png"
+	
+	method tipo() {
+		return invernaderoDia
+	}
 }
 
 

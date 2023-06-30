@@ -1,17 +1,20 @@
 import wollok.game.*
 import extras.*
 import configuraciones.*
+import entornos.*
 
 
 class Planta inherits Objeto{
 	
 	var property estado = sana
 	var property etapas = [brote, intermedio, florecida]
+	var etapa = brote
 	var nivelAgua
 	var nivelTierra
 	var nivelSol
 	var desarrollo = 0
 	var deterioro = 0
+	var entorno = exterior
 
 	const property temporizador = new TemporizadorPlanta(planta=self) // tiene que ser el utimo atributo porque necesita recibir a la planta ya con sus atributos definidos
 	
@@ -37,12 +40,23 @@ class Planta inherits Objeto{
 			game.addVisual(self)
 		}	
 	}
+	
+	method actualizarEtapa() {
+		etapa = etapas.first()
+	}
+	
+	override method esDejado(ambiente) {
+		super(ambiente)
+		entorno = ambiente.tipo()
+	}
 
 	override method esPlanta() {
 		return true
 	}
 	
-	method text() // = "A: " + self.nivelAgua() + " | " + "T: " + self.nivelTierra() + " | " + "S: " + self.nivelSol()
+//	method text(){
+//		return "A: " + self.nivelAgua() + " | " + "T: " + self.nivelTierra() + " | " + "S: " + self.nivelSol()
+//	} 
 	
 	method tipo()
 	
@@ -131,13 +145,19 @@ class Planta inherits Objeto{
 		return self.todasNecesidadesSatisfechas() and self.desarrollo() >= 99
 	}
 	
+	method modificarSol()
+	
+	method modificarAgua()
+	
+	method modificarTierra()
+	
 	method recibirEfectos(){
 		//los efectos van a ser recibidos del entorno
 		//solo por ahora simplemente se le va descontar 5 a cada necesidad
 		//para que haga algo por ahora. REEMPLAZAR CUANDO YA ESTE LO DE ENTORNO
-		nivelAgua -=5
-		nivelTierra-=5
-		nivelSol-=5
+		self.modificarSol()
+		self.modificarAgua()
+		self.modificarTierra()
 	}
 }
 
@@ -145,6 +165,19 @@ class PlantaPatagonica inherits Planta{
 	override method tipo(){
 		return "patagonica"
 	}
+	
+	override method modificarSol() {
+		nivelSol += entorno.solQueAporta()
+	}
+	
+	override method modificarAgua() {
+		nivelAgua += entorno.aguaQueAporta()
+	}
+	
+	override method modificarTierra() {
+		nivelTierra += entorno.tierraQueAporta()
+	}
+	
 	//esto me suena raro que quede tan vacio. Cualquier cosa lo revisamos despues
 }
 
@@ -153,12 +186,36 @@ class PlantaHumeda inherits Planta{
 	override method tipo(){
 		return "humeda"
 	}
+	
+	override method modificarSol() {
+		nivelSol += entorno.solQueAporta()
+	}
+	
+	override method modificarAgua() {
+		nivelAgua += entorno.aguaQueAporta()
+	}
+	
+	override method modificarTierra() {
+		nivelTierra += entorno.tierraQueAporta()
+	}
 	//esto me suena raro que quede tan vacio. Cualquier cosa lo revisamos despues
 }
 
 class PlantaTropical inherits Planta{
 	override method tipo(){
 		return "tropical"
+	}
+	
+	override method modificarSol() {
+		nivelSol += entorno.solQueAporta()
+	}
+	
+	override method modificarAgua() {
+		nivelAgua += entorno.aguaQueAporta()
+	}
+	
+	override method modificarTierra() {
+		nivelTierra += entorno.tierraQueAporta()
 	}
 	//esto me suena raro que quede tan vacio. Cualquier cosa lo revisamos despues
 }
