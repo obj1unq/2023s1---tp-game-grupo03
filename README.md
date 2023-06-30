@@ -51,9 +51,13 @@ Se deberá cuidar las plantas dándoles agua y tierra, además de dejarlas al so
 ### Florecida
 - Ya no tiene necesidades, es una planta florecida! 
 
+## Condiciones Fin de Juego:
+### Para ganar
+- Si llegas a tener 3 o más plantas florecidas y menos de 4 plantas marchitas, ganarás el juego!
+
+### Para perder
+- Si llegas a tener 4 o más plantas marchitas, perderás el juego!
 
 ## Otros
-
 - Objetos 1 - Comisión 2
-- Versión de wollok
-- Una vez terminado, no tenemos problemas en que el repositorio sea público / queremos manternerlo privado
+- Una vez terminado, no tenemos problemas en que el repositorio sea público
