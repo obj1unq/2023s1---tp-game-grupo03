@@ -79,12 +79,11 @@ Los invernaderos por su parte también tienen un rociador que puede estar o no a
 
 ### Invernadero Nocturno
 - Si el dia fue templado ( la diferencia de calor y humedad es entre 0 y 3) cambia su comportamiento
-- Sol de invernadero: No aporta ni resta sol si el dia fue templado, si no fue templado resta la diferencia entre el calor y la humedad
-  - 
+- Sol que aporta: 
+    - No aporta ni resta sol si el dia fue templado, si no fue templado resta la diferencia entre el calor y la humedad
 - Agua que aporta:
   - Mismo comportamiento que el exterior, aunque si el dia fue templado suma la mitad de la humedad
-
-- Tierra que aporta: Aporta la mitad del valor absoluto de la intemperie
+- Tierra que aporta: Aporta la mitad del valor siempre positivo de la intemperie
     
 ## Condiciones Fin de Juego:
 ### Para ganar
