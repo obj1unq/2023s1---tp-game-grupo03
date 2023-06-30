@@ -52,39 +52,39 @@ Se deberá cuidar las plantas dándoles agua y tierra, además de dejarlas al so
 - Ya no tiene necesidades, es una planta florecida! 
 
 ## Entornos:
-Los 3 entornos se ven afectados por las condiciones del exterior: calor = 10, humedad = 4 y si es o no un día caluroso. Cada entorno aportará una cantidad de sol, tierra y agua diferente.
-Los invernaderos por su parte también tienen un rociador que está activado en el invernadero diurno y no en el nocturno, y además se ven afectados por un "sol de invernadero".
+Los 3 entornos se ven afectados por las condiciones del exterior: calor y humedad, ambos toman un valor aleatorio entre 5 y 10, si hace mas o igual calor que humedad, se considera un dia Caluroso.
+Cada entorno aportará una cantidad de sol, tierra y agua diferente.
+Los invernaderos por su parte también tienen un rociador que puede estar o no activado en el invernadero diurno, pero no en el nocturno, y además el invernadero diurno se ve afectados por un "sol de invernadero".
 
 ### Intemperie
 - Sol que aporta:
-  - Si es un día caluroso: 10
-  - Si no es día caluroso: 3
+  - Si es un día caluroso: Aporta un valor igual a calor
+  - Si no es día caluroso: aporta el doble de la diferencia entre la humedad y el calor
 - Agua que aporta:
-  - Si es un día caluroso: - 4
-  - Si no es día caluroso: 4
+  - Si es un día caluroso: Resta el valor del calor
+  - Si no es día caluroso: Aporta el mismo valor que la humedad
 - Tierra que aporta:
-  - Si es un día caluroso: - 5
-  - Si no es día caluroso: 6
-    
+  - Si es un día caluroso: Siempre resta -5
+  - Si no es día caluroso: Aporta la diferencia entre la humedad y el calor
+
 ### Invernadero Diurno
 - Sol de invernadero: Devuelve un número random entre 1 y 4
 - Sol que aporta:
-  - Si es un día caluroso: 10 + sol de invernadero
-  - Si no es día caluroso: 3 + sol de invernadero
+  - Si es un día caluroso: Aporta el calor de la intemperie + sol de invernadero
+  - Si no es día caluroso: aporta el mismo sol que la intemperie
 - Agua que aporta:
-  - Si es un día caluroso: 4
-  - Si no es día caluroso: 4
-- Tierra que aporta: - 3
-    
+  - Si el rociador esta prendido aporta el absoluto pasado por la intemperie
+  - Si el rociador esta apagado devuelve el mismo valor que la intemperie
+- Tierra que aporta: siempre resta 3 de tierra
+
 ### Invernadero Nocturno
-- Sol de invernadero: Devuelve 0
-- Sol que aporta:
-  - Si es un día caluroso: -10
-  - Si no es día caluroso: -3
+- Si el dia fue templado ( la diferencia de calor y humedad es entre 0 y 3) cambia su comportamiento
+- Sol de invernadero: No aporta ni resta sol si el dia fue templado, si no fue templado resta la diferencia entre el calor y la humedad
+  - 
 - Agua que aporta:
-  - Si es un día caluroso: 4
-  - Si no es día caluroso: 12
-- Tierra que aporta: 3
+  - Mismo comportamiento que el exterior, aunque si el dia fue templado suma la mitad de la humedad
+
+- Tierra que aporta: Aporta la mitad del valor absoluto de la intemperie
     
 ## Condiciones Fin de Juego:
 ### Para ganar
