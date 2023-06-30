@@ -1,0 +1,65 @@
+import wollok.game.*
+import plantas.*
+import extras.*
+import configuraciones.*
+import personaje.*
+
+describe "Plantas"{
+	const plantaPatagonica1 = new PlantaPatagonica(position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+	const plantaPatagonica2 = new PlantaPatagonica(position = game.at(5,0), nivelAgua = 30, nivelSol = 100, nivelTierra = 75)
+	const tierra = new MonticuloTierra(position = game.at(6,0))
+	const agua = new BaldeAgua(position = game.at(7,0))
+	
+	test "crecimiento por temporizador" {
+		//está en etapa brote
+		assert.equals(brote, plantaPatagonica1.etapa())
+		//no puede crecer
+		assert.notThat(plantaPatagonica1.puedeCrecer())
+		//tiene todas sus necesidades satisfechas
+		assert.that(plantaPatagonica1.todasNecesidadesSatisfechas())
+		//completa el desarrollo necesario 
+		plantaPatagonica1.aplicarDesarrollo(100)
+		//puede crecer porque tiene el desarrollo adecuado y sus necesidades satisfechas
+		assert.that(plantaPatagonica1.puedeCrecer())
+		//cuadndo se termina el tiempo de crecimiento crece
+		plantaPatagonica1.temporizador().iniciar(plantaPatagonica1.tiempoDeCrecimiento())
+		//crecio a etapa intermedia
+		assert.equals(intermedio, plantaPatagonica1.etapa())
+	}
+	
+	test "se aplican efectos de elementos sobre planta" {
+		tierra.iniciar(pantallaPrincipal)
+		// Nivel de tierra inicial = 75
+		tierra.aplicarEfecto(plantaPatagonica1)
+		assert.equals(85, plantaPatagonica1.nivelTierra())
+		// Nivel de agua inicial = 55
+		agua.iniciar(pantallaPrincipal)
+		agua.aplicarEfecto(plantaPatagonica1)
+		assert.equals(65, plantaPatagonica1.nivelAgua())
+	}
+	
+	test "marchitarse por temporizador" {
+		//no puede machitarse
+		assert.notThat(plantaPatagonica2.puedeMarchitarse())
+		//tiene la mayoria de sus necesidades insatisfechas
+		assert.that(plantaPatagonica2.mayoriaNecesidadesInsatisfechas())
+		//completa el deterioro necesario 
+		plantaPatagonica2.aplicarDeterioro(100)
+		//puede crecer porque tiene el desarrollo adecuado y sus necesidades satisfechas
+		assert.that(plantaPatagonica2.puedeMarchitarse())
+		//cuadndo se termina el tiempo de marchitarse se marchita
+		plantaPatagonica2.temporizador().iniciar(plantaPatagonica2.tiempoDeMarchitarse())
+		//la planta no es sana
+		assert.notThat(plantaPatagonica2.esSana())
+	}
+	
+	test "planta recibiendo efectos de entorno"{
+		assert.equals(55, plantaPatagonica1.nivelAgua())
+		assert.equals(50, plantaPatagonica1.nivelSol())
+		assert.equals(75, plantaPatagonica1.nivelTierra())
+		plantaPatagonica1.recibirEfectos()
+		assert.equals(46, plantaPatagonica1.nivelAgua())
+		assert.equals(59, plantaPatagonica1.nivelSol())
+		assert.equals(70, plantaPatagonica1.nivelTierra())
+	}
+}

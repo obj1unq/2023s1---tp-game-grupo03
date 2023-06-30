@@ -1,0 +1,48 @@
+import personaje.*
+import wollok.game.*
+import plantas.*
+import configuraciones.*
+
+describe "Manipulación de los objetos por parte del jardinero" {
+
+	const plantaPatagonica1 = new PlantaPatagonica(esSana = true, position = game.at(5,0), nivelAgua = 55, nivelSol = 50, nivelTierra = 75)
+	
+	test "Jardinero cambia de dirección" {
+		assert.equals(right, jardinero.direccion())
+		jardinero.cambiarDireccion(left)
+		assert.equals(left, jardinero.direccion())
+		jardinero.cambiarDireccion(down)
+		assert.equals(down, jardinero.direccion())
+		jardinero.cambiarDireccion(up)
+		assert.equals(up, jardinero.direccion())
+	}
+	
+	test "Mover al jardinero en dirección al Norte - Más 1 en eje y" {
+		assert.equals(game.at(3, 3), jardinero.position())
+		jardinero.cambiarDireccion(up)
+		jardinero.move(jardinero)
+		assert.equals(game.at(3, 4), jardinero.position())
+	}
+	
+	test "El jardinero puede llevar un objeto" {
+		pantallaPrincipal.iniciar()
+		assert.equals(game.at(3, 3), jardinero.position())
+		assert.notThat(jardinero.puedeLlevar(plantaPatagonica1))
+		jardinero.position(game.at(5,0))
+		assert.that(jardinero.puedeLlevar(plantaPatagonica1))
+		jardinero.llevar(plantaPatagonica1)
+		assert.equals(plantaPatagonica1, jardinero.objetoEnPosesion())
+		assert.equals(jardinero, plantaPatagonica1.meEstaLlevando())
+	}
+	
+	test "El jardinero puede dejar un objeto" {
+		pantallaPrincipal.iniciar()
+		jardinero.position(game.at(5,0))
+		assert.that(jardinero.puedeLlevar(plantaPatagonica1))
+		jardinero.llevar(plantaPatagonica1)
+		jardinero.dejar()
+		assert.equals(null, jardinero.objetoEnPosesion())
+		assert.equals(null, plantaPatagonica1.meEstaLlevando())
+	}
+}
+
