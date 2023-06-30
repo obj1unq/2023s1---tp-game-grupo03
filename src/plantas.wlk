@@ -12,6 +12,10 @@ class TextoAtributo inherits Objeto
 	override method position() = game.at(planta.position().x(), planta.position().y() + 1)
 	
 	method textColor() = paleta.verde()
+	
+	override method image() {
+		
+	}
 }
 
 class Planta inherits Transportable {
@@ -32,6 +36,7 @@ class Planta inherits Transportable {
 	var property indicadorExcesoTierra = new IndicadorExcesoTierra(planta = self)
 	var property parametros = new TextoAtributo(planta = self)
 	var entorno = exterior
+	
 
 	method actualizarNecesidades(pantalla) {
 		const necesidades = #{ indicadorDeficitAgua, indicadorExcesoAgua, indicadorDeficitSol, indicadorExcesoSol, indicadorDeficitTierra, indicadorExcesoTierra }
