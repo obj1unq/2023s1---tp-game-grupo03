@@ -224,5 +224,7 @@ object paleta {
 
 }
 
+const tierra = new MonticuloTierra(position = game.at(6,0))
+const agua = new BaldeAgua(position = game.at(7,0))
 // method text() = "A: " + self.nivelAgua() + " | " + "T: " + self.nivelTierra() + " | " + "S: " + self.nivelSol()
 // method textColor() = paleta.verde()

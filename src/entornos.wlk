@@ -1,121 +1,201 @@
 import wollok.game.*
-
+import plantas.*
 
 class Intemperie {
-	var property soleado = true  // Bool
-	var property calor = 0 // Int
-	const humedad  = 0// Int
-	
-	
-	method modificarSol() {
-		if (soleado) {
+	// Los valores de calor y humedad deben variar entre 0 y 10
+	var property calor = 10 // Int
+	const humedad = 4 // Int
+
+	method diaCaluroso() {
+		return calor > humedad
+	}
+
+	method solQueAporta() {
+		if (self.diaCaluroso()) {
 			return calor
-		}
-		else {
-			return -1 * (humedad / 2)
+		} else {
+			return (calor / humedad).roundUp() // -1 * (humedad / 2)
 		}
 	}
-	
-	method aguaDeHumedad() {
-		return 10
+
+	method aguaQueAporta() {
+		if (self.diaCaluroso()) {
+			return -humedad
+		} else {
+			return humedad
+		}
 	}
-	
-	method modificarAgua() {
-		if (soleado) {
+
+	method tierraQueAporta() {
+		if (self.diaCaluroso()) {
 			return -5
-		}
-		else {
-			return self.aguaDeHumedad()
-		}
-	}
-	
-	method modificarTierra() {
-		if (soleado) {
-			return (calor / 2).min(10)
-		}
-		else {
-			return 5 + (humedad - calor)
+		} else {
+			return (calor - humedad).abs()
 		}
 	}
 }
 
-class InvernaderoDiurno inherits Intemperie {
-	var property position 
-	var property tipo 
+class Invernadero inherits Intemperie {
+
+	var property position
+	var property tipo
 	var property rociador
-	
+
 	method image() {
 		return "invernadero-" + tipo.toString() + ".png"
 	}
-	
+
 	method iniciar() {
 		game.addVisual("invernadero-interior-" + tipo + ".png")
-	}	
-	
-	override method calor() {
-		return exterior.calor()
 	}
-	
-	method diaCaluroso() {
-		return self.calor() > humedad
-	}
-	
-	override method modificarSol() {
-		if (soleado) {
-			return super() / 2
-		}
-		else {
-			return super() + (humedad / 3)
-		}
-	}
-	
-	
-	override method modificarAgua() {
-		if (soleado) {
-			return (super() - rociador).max(5)
-		}
-		else {
-			return super() + 5
-		}
-	}
-	
-	override method modificarTierra() {
-		if ( not (self.diaCaluroso())) {
-			return 10
-		}
-		else {
-			return -6
-		}
-	}		
-}
-	
 
-class InvernaderoNocturno inherits InvernaderoDiurno {
-	
-	override method soleado() {
-		soleado = false
-	}
-		
-	override method modificarSol() {
-		return rociador - calor
-	}
-	
-	override method modificarAgua() {
-		return super() + self.aguaDeHumedad() + 5
-	}
-	
-	override method modificarTierra() {
-		if ( not (self.diaCaluroso())) {
-			return super() * 2
-		}
-		else {
-			return super() / 2
-		}
-	}	
+	method solDeInvernadero()
+
 }
 
+class InvernaderoDiurno inherits Invernadero {
 
+	override method solDeInvernadero() {
+		return 1.randomUpTo(4)
+	}
 
-const exterior = new Intemperie (calor = 30, soleado = true, humedad = 40)
-const invernaderoDia = new InvernaderoDiurno(humedad = 20,calor = exterior.calor(), soleado = true, rociador = 5, tipo = "dia", position = game.at(10.5,4.9))
-const invernaderoNoche = new InvernaderoNocturno(humedad = 20, rociador = 10, calor = 30, tipo = "nocturno", position = game.at(12.5,4.9))
+	override method solQueAporta() {
+		return super() + self.solDeInvernadero()
+	}
+
+	override method aguaQueAporta() {
+		if (rociador) {
+			return super().abs()
+		} else {
+			return super()
+		}
+	}
+
+	override method tierraQueAporta() {
+		return -3
+	}
+
+}
+
+class InvernaderoNocturno inherits Invernadero {
+
+	override method solDeInvernadero() {
+		return 0
+	}
+
+	override method solQueAporta() {
+		return super() * -1
+	}
+
+	override method aguaQueAporta() {
+		return super() + (humedad * 2)
+	}
+
+	override method tierraQueAporta() {
+		return (super() / 2).roundUp().abs()
+	}
+
+}
+
+// --------------------------------------------------------------------- //
+//class Intemperie {
+//	//Los valores de calor y humedad deben variar entre 0 y 10
+//	var property calor = 10 // Int
+//	const humedad  = 4// Int
+//	
+//	method diaCaluroso() {
+//		return calor > humedad
+//	}
+//	
+//	method solQueAporta() {
+//		if (self.diaCaluroso()) {
+//			return calor
+//		}
+//		else {
+//			return (calor / humedad).roundUp() //-1 * (humedad / 2)
+//		}
+//	}
+//	
+//	
+//	method aguaQueAporta() {
+//		if (self.diaCaluroso()) {
+//			return  - humedad
+//		}
+//		else {
+//			return    humedad
+//		}
+//	}
+//	
+//	method tierraQueAporta() {
+//		if (self.diaCaluroso()) {
+//			return -5
+//		}
+//		else {
+//			return (calor - humedad).abs()
+//		}
+//	}
+//}
+//
+//class InvernaderoDiurno inherits Intemperie {
+//	var property position 
+//	var property tipo 
+//	var property rociador
+//	
+//	method image() {
+//		return "invernadero-" + tipo.toString() + ".png"
+//	}
+//	
+//	method iniciar() {
+//		game.addVisual("invernadero-interior-" + tipo + ".png")
+//	}	
+//	
+//	method solDeInvernadero() {
+//		return 1.randomUpTo(4)
+//	}
+//	
+//	override method solQueAporta() {
+//			return super() + self.solDeInvernadero()
+//
+//	}
+//	
+//	
+//	override method aguaQueAporta() {
+//		if (rociador) {
+//			return super().abs()
+//		}
+//		else {
+//			return super()
+//		}
+//	}
+//	
+//	override method tierraQueAporta() {
+//		return -3
+//	}		
+//}
+//	
+//
+//class InvernaderoNocturno inherits InvernaderoDiurno {
+//	
+//	
+//	override method solDeInvernadero() {
+//		return 0
+//	}
+//
+//	override method solQueAporta() {
+//		return super() * -1
+//	}
+//	
+//	override method aguaQueAporta() {
+//		return super() + (humedad * 2)
+//	}
+//	
+//	override method tierraQueAporta() {
+//		return (super() / 2).roundUp().abs()
+//	}
+//}
+const invernaderoDia = new InvernaderoDiurno(rociador = true, tipo = "dia", position = game.at(10.5, 4.9))
+
+const invernaderoNoche = new InvernaderoNocturno(rociador = false, tipo = "nocturno", position = game.at(12.5, 4.9))
+
+const exterior = new Intemperie()
+

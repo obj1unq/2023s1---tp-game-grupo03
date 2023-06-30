@@ -47,13 +47,12 @@ describe "Pantallas disponibles en juego" {
 		pantallaPrincipal.agregarElemento(agua)
 		pantallaPrincipal.iniciar()
 		assert.equals(#{pino, tierra, agua}, pantallaPrincipal.elementos())
+		invernaderoDiurno.iniciar()
 		pino.meEstaLlevando(jardinero)
 		pino.esDejado(invernaderoDiurno)
 		assert.equals(#{pino}, invernaderoDiurno.elementos())
-		assert.equals(#{tierra, agua}, pantallaPrincipal.elementos())
+        assert.equals(#{tierra, agua}, pantallaPrincipal.elementos())
 	}
-	
-	// Hay que ver si se puede probar de alguna manera el comportamiento el ganar y perder
 	
 	test "Fin de juego - Perdió" {
 		pantallaPrincipal.iniciar()
