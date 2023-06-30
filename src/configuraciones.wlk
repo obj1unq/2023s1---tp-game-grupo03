@@ -63,6 +63,16 @@ class Pantalla {
 
 	method position() {
 		return game.origin()
+		}
+		
+	method mostrarParametros()
+	{
+		timer.plantas().forEach({ planta => planta.agregarSiNoExiste(planta.parametros()) })
+	}
+	
+	method quitarParametros()
+	{
+		timer.plantas().forEach({ planta => planta.quitarSiExiste(planta.parametros()) })
 	}
 
 	// Todas tienen que declarar su imagen
@@ -100,7 +110,8 @@ object pantallaPrincipal inherits Pantalla {
 		return exterior
 	}
 
-	override method configTeclas() {
+	override method configTeclas()
+	{
 		keyboard.x().onPressDo({ jardinero.llevar(jardinero.obtenerObjetoDePosicion())})
 		keyboard.z().onPressDo({ jardinero.dejar()})
 		keyboard.n().onPressDo({ invernaderoNocturno.iniciar()})
@@ -110,7 +121,10 @@ object pantallaPrincipal inherits Pantalla {
 		keyboard.down().onPressDo{ jardinero.cambiarDireccion(down)}
 		keyboard.left().onPressDo{ jardinero.cambiarDireccion(left)}
 		keyboard.right().onPressDo{ jardinero.cambiarDireccion(right)}
-	}
+		keyboard.q().onPressDo{ game.say(jardinero, "Mi posición es" + jardinero.position())}
+		keyboard.p().onPressDo{ self.mostrarParametros() game.schedule(3000, {=> self.quitarParametros()}) }
+		
+}
 
 	override method iniciar() {
 		super()
@@ -157,7 +171,8 @@ class PantallaInvernadero inherits Pantalla {
 		keyboard.i().onPressDo{ pantallaIntrucciones.iniciar()}
 		keyboard.x().onPressDo{ jardinero.llevar(jardinero.obtenerObjetoDePosicion())}
 		keyboard.z().onPressDo{ jardinero.dejar()}
-		keyboard.p().onPressDo{ game.say(jardinero, "Mi posición es" + jardinero.position())}
+		keyboard.q().onPressDo{ game.say(jardinero, "Mi posición es" + jardinero.position())}
+		keyboard.p().onPressDo{ self.mostrarParametros() game.schedule(3000, {=> self.quitarParametros()}) }
 	}
 
 	override method iniciar() {
@@ -236,7 +251,6 @@ object rocola {
 			track.play()
 		}
 	}
-
 }
 
 object musicaMenu {
@@ -253,7 +267,7 @@ object musicaInvernadero {
 
 object timer {
 
-	const plantas = #{ pino }
+	const property plantas = #{ pino }
 	const ticks = 500
 
 	method agregarPlanta(planta) {
@@ -284,7 +298,7 @@ object timer {
 	}
 
 	method iniciarCuentasRegresivas(pantalla) {
-		plantas.forEach({ planta => planta.iniciar(pantalla)})
+		plantas.forEach( { planta => planta.iniciar(pantalla) } )
 		plantas.forEach{ planta => planta.temporizador().iniciar(ticks)}
 	}
 

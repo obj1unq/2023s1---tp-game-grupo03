@@ -3,6 +3,17 @@ import extras.*
 import configuraciones.*
 import entornos.*
 
+class TextoAtributo inherits Objeto
+{
+	const planta
+	
+	method text() = "Agua: " + planta.nivelAgua() + " | " + "Tierra: " + planta.nivelTierra() + " | " + "Sol: " + planta.nivelSol()
+	
+	override method position() = game.at(planta.position().x(), planta.position().y() + 1)
+	
+	method textColor() = paleta.verde()
+}
+
 class Planta inherits Transportable {
 	var property esSana = true
 	var property etapas = [ brote, intermedio, florecida ]
@@ -19,6 +30,7 @@ class Planta inherits Transportable {
 	var property indicadorExcesoSol = new IndicadorExcesoSol(planta = self)
 	var property indicadorDeficitTierra = new IndicadorDeficitTierra(planta = self)
 	var property indicadorExcesoTierra = new IndicadorExcesoTierra(planta = self)
+	var property parametros = new TextoAtributo(planta = self)
 	var entorno = exterior
 
 	method actualizarNecesidades(pantalla) {
@@ -26,11 +38,12 @@ class Planta inherits Transportable {
 		necesidades.forEach({ necesidad => necesidad.iniciar(pantalla)})
 	}
 
-	override method iniciar(pantalla) {
-		if (pantalla == self.pantallaActual()) {
-			self.quitarSiExiste(self)
+	override method iniciar(pantalla)
+	{
+		if( pantalla == self.pantallaActual() )
+		{
 			self.actualizarNecesidades(pantalla)
-			game.addVisual(self)
+			self.agregarSiNoExiste(self)
 		}
 	}
 	
@@ -47,6 +60,8 @@ class Planta inherits Transportable {
 		return true
 	}
 	
+	// method text() = "A: " + self.nivelAgua() + " | " + "T: " + self.nivelTierra() + " | " + "S: " + self.nivelSol()
+	// method textColor() = paleta.verde()
 //	method text(){
 //		return "A: " + self.nivelAgua() + " | " + "T: " + self.nivelTierra() + " | " + "S: " + self.nivelSol()
 //	} 
@@ -124,7 +139,8 @@ class Planta inherits Transportable {
 		return self.etapa().necesidadesSatisfechas(self) < 2
 	}
 
-	method puedeMarchitarse() {
+	method puedeMarchitarse()
+	{
 		return self.mayoriaNecesidadesInsatisfechas() and self.deterioro() >= 99
 	}
 
@@ -216,42 +232,48 @@ class PlantaTropical inherits Planta {
 class NivelDeCrecimiento {
 
 	method deterioroaAplicar()
-
 	method desarrolloaAplicar()
 
-	method minimoAgua() {
+	method minimoAgua()
+	{
 		return 40
 	}
 
-	method maximoAgua() {
+	method maximoAgua()
+	{
 		return 70
 	}
 
-	method minimoTierra() {
+	method minimoTierra()
+	{
 		return 60
 	}
 
-	method maximoTierra() {
+	method maximoTierra()
+	{
 		return 90
-	}
+	} // 90 - 60 = 30
 
-	method minimoSol() {
+	method minimoSol()
+	{
 		return 30
 	}
 
-	method maximoSol() {
+	method maximoSol()
+	{
 		return 60
 	}
 
 	method tiempoCrecimiento()
-
 	method tiempoMarchitar()
 
-	method aplicarDeterioro(planta) {
+	method aplicarDeterioro(planta)
+	{
 		planta.aplicarDeterioro(self.deterioroaAplicar())
 	}
 
-	method aplicarDesarrollo(planta) {
+	method aplicarDesarrollo(planta)
+	{
 		planta.aplicarDesarrollo(self.desarrolloaAplicar())
 	}
 
@@ -284,7 +306,7 @@ object brote inherits NivelDeCrecimiento {
 	}
 
 	override method deterioroaAplicar() {
-		return 33
+		return 33 //En tres ticks llega a 99, se cumple el deterioro >= 99
 	}
 
 	override method desarrolloaAplicar() {
@@ -293,9 +315,11 @@ object brote inherits NivelDeCrecimiento {
 
 }
 
-object intermedio inherits NivelDeCrecimiento {
+object intermedio inherits NivelDeCrecimiento
+{
 
-	override method tiempoMarchitar() {
+	override method tiempoMarchitar()
+	{
 		return 5000
 	}
 
@@ -304,35 +328,42 @@ object intermedio inherits NivelDeCrecimiento {
 	}
 
 	override method minimoAgua() {
-		return super() * 1.3
+		return super() * 1.3 // 40 * 1.3 = 52
 	}
 
-	override method maximoAgua() {
-		return super() * 0.9
+	override method maximoAgua()
+	{
+		return super() * 0.9 // 70 * 0.9 = 63 --> 63 - 52 = 11
 	}
 
-	override method minimoTierra() {
-		return super() * 1.3
+	override method minimoTierra()
+	{
+		return super() * 1.3 // 60 * 1.3 = 78
 	}
 
-	override method maximoTierra() {
-		return super() * 0.9
+	override method maximoTierra()
+	{
+		return super() * 0.9 // 90 * 0,9 = 81 --> 81-78 = 3
 	}
 
-	override method minimoSol() {
-		return super() * 1.3
+	override method minimoSol()
+	{
+		return super() * 1.3 // 30 = 39
 	}
 
-	override method maximoSol() {
-		return super() * 0.9
+	override method maximoSol()
+	{
+		return super() * 0.9 // 60 = 54 --> 54-39 = 15
 	}
 
-	override method deterioroaAplicar() {
-		return 50
+	override method deterioroaAplicar()
+	{
+		return 50 // Se muere en dos ticks
 	}
 
-	override method desarrolloaAplicar() {
-		return 33
+	override method desarrolloaAplicar()
+	{
+		return 33 // Crece en 3 ticks
 	}
 
 }

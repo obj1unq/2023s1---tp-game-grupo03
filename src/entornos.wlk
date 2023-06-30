@@ -6,14 +6,19 @@ class Intemperie {
 	var property calor = 10 // Int
 	const humedad = 4 // Int
 
-	method diaCaluroso() {
+	method diaCaluroso()
+	{
 		return calor > humedad
 	}
 
-	method solQueAporta() {
-		if (self.diaCaluroso()) {
+	method solQueAporta()
+	{
+		if (self.diaCaluroso())
+		{
 			return calor
-		} else {
+		} 
+		else 
+		{
 			return (calor / humedad).roundUp() // -1 * (humedad / 2)
 		}
 	}

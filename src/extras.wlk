@@ -95,7 +95,7 @@ class BaldeAgua inherits Elemento {
 
 class Necesidad inherits Objeto {
 
-	const planta
+	const property planta
 	
 	method condicion()
 	
@@ -105,10 +105,14 @@ class Necesidad inherits Objeto {
 		return planta.position()
 	}
 	
-	override method iniciar(pantalla) {
-		if (self.condicion()) {
+	override method iniciar(pantalla)
+	{
+		if (self.condicion())
+		{
 			self.agregarSiNoExiste(self.tipoIndicador())
-		} else {
+		} 
+		else
+		{
 			self.quitarSiExiste(self.tipoIndicador())
 		}
 	}
@@ -226,5 +230,4 @@ object paleta {
 
 const tierra = new MonticuloTierra(position = game.at(6,0))
 const agua = new BaldeAgua(position = game.at(7,0))
-// method text() = "A: " + self.nivelAgua() + " | " + "T: " + self.nivelTierra() + " | " + "S: " + self.nivelSol()
-// method textColor() = paleta.verde()
+
