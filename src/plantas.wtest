@@ -58,8 +58,8 @@ describe "Plantas"{
 		assert.equals(50, plantaPatagonica1.nivelSol())
 		assert.equals(75, plantaPatagonica1.nivelTierra())
 		plantaPatagonica1.recibirEfectos()
-		assert.equals(51, plantaPatagonica1.nivelAgua())
-		assert.equals(60, plantaPatagonica1.nivelSol())
+		assert.equals(46, plantaPatagonica1.nivelAgua())
+		assert.equals(59, plantaPatagonica1.nivelSol())
 		assert.equals(70, plantaPatagonica1.nivelTierra())
 	}
 }

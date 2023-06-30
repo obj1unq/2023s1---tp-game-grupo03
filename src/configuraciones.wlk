@@ -63,16 +63,18 @@ class Pantalla {
 
 	method position() {
 		return game.origin()
-		}
-		
-	method mostrarParametros()
-	{
-		timer.plantas().forEach({ planta => planta.agregarSiNoExiste(planta.parametros()) })
 	}
-	
-	method quitarParametros()
-	{
-		timer.plantas().forEach({ planta => planta.quitarSiExiste(planta.parametros()) })
+
+	method plantasDelEntorno() {
+		return timer.plantas().filter({ planta => planta.entorno() == jardinero.ambiente().tipo() })
+	}
+
+	method mostrarParametros() {
+		self.plantasDelEntorno().forEach({ planta => planta.agregarSiNoExiste(planta.parametros())})
+	}
+
+	method quitarParametros() {
+		self.plantasDelEntorno().forEach({ planta => planta.quitarSiExiste(planta.parametros())})
 	}
 
 	// Todas tienen que declarar su imagen
@@ -105,13 +107,12 @@ object menuInicial inherits Pantalla {
 object pantallaPrincipal inherits Pantalla {
 
 	var property image = "exterior.png"
-	
+
 	method tipo() {
 		return exterior
 	}
 
-	override method configTeclas()
-	{
+	override method configTeclas() {
 		keyboard.x().onPressDo({ jardinero.llevar(jardinero.obtenerObjetoDePosicion())})
 		keyboard.z().onPressDo({ jardinero.dejar()})
 		keyboard.n().onPressDo({ invernaderoNocturno.iniciar()})
@@ -122,9 +123,10 @@ object pantallaPrincipal inherits Pantalla {
 		keyboard.left().onPressDo{ jardinero.cambiarDireccion(left)}
 		keyboard.right().onPressDo{ jardinero.cambiarDireccion(right)}
 		keyboard.q().onPressDo{ game.say(jardinero, "Mi posición es" + jardinero.position())}
-		keyboard.p().onPressDo{ self.mostrarParametros() game.schedule(3000, {=> self.quitarParametros()}) }
-		
-}
+		keyboard.p().onPressDo{ self.mostrarParametros()
+			game.schedule(3000, {=> self.quitarParametros()})
+		}
+	}
 
 	override method iniciar() {
 		super()
@@ -139,9 +141,9 @@ object pantallaPrincipal inherits Pantalla {
 		elementos.forEach({ elemento => elemento.iniciar(self)})
 		timer.iniciar(self)
 	}
-	
+
 	method llegoAlLimiteDePlantas() {
-		return elementos.filter({elemento => elemento.esPlanta()}).size() >= 8
+		return elementos.filter({ elemento => elemento.esPlanta() }).size() >= 8
 	}
 
 	override method pista() {
@@ -172,7 +174,9 @@ class PantallaInvernadero inherits Pantalla {
 		keyboard.x().onPressDo{ jardinero.llevar(jardinero.obtenerObjetoDePosicion())}
 		keyboard.z().onPressDo{ jardinero.dejar()}
 		keyboard.q().onPressDo{ game.say(jardinero, "Mi posición es" + jardinero.position())}
-		keyboard.p().onPressDo{ self.mostrarParametros() game.schedule(3000, {=> self.quitarParametros()}) }
+		keyboard.p().onPressDo{ self.mostrarParametros()
+			game.schedule(3000, {=> self.quitarParametros()})
+		}
 	}
 
 	override method iniciar() {
@@ -193,19 +197,21 @@ class PantallaInvernadero inherits Pantalla {
 object invernaderoNocturno inherits PantallaInvernadero {
 
 	var property image = "invernadero-interior-nocturno.png"
-	
+
 	method tipo() {
 		return invernaderoNoche
 	}
+
 }
 
 object invernaderoDiurno inherits PantallaInvernadero {
 
 	var property image = "invernadero-interior-dia.png"
-	
+
 	method tipo() {
 		return invernaderoDia
 	}
+
 }
 
 object rocola {
@@ -251,6 +257,7 @@ object rocola {
 			track.play()
 		}
 	}
+
 }
 
 object musicaMenu {
@@ -287,18 +294,18 @@ object timer {
 		}
 		pantalla.chequearEstadoDelJuegoParaFinalizacion()
 	}
-	
+
 	method removerEventos(pantalla) {
 		if (pantalla.equals(pantallaPrincipal)) {
 			game.removeTickEvent("CUENTA_REGRESIVA")
 			game.removeTickEvent("NUEVAS_PLANTAS")
-			game.removeTickEvent("NUEVOS_ELEMENTOS")	
+			game.removeTickEvent("NUEVOS_ELEMENTOS")
 		}
 		game.removeTickEvent("FIN_JUEGO")
 	}
 
 	method iniciarCuentasRegresivas(pantalla) {
-		plantas.forEach( { planta => planta.iniciar(pantalla) } )
+		plantas.forEach({ planta => planta.iniciar(pantalla)})
 		plantas.forEach{ planta => planta.temporizador().iniciar(ticks)}
 	}
 

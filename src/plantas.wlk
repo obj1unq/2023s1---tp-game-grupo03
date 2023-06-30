@@ -3,19 +3,14 @@ import extras.*
 import configuraciones.*
 import entornos.*
 
-class TextoAtributo inherits Objeto
-{
+class TextoAtributo {
 	const planta
 	
 	method text() = "Agua: " + planta.nivelAgua() + " | " + "Tierra: " + planta.nivelTierra() + " | " + "Sol: " + planta.nivelSol()
 	
-	override method position() = game.at(planta.position().x(), planta.position().y() + 1)
+	method position() = game.at(planta.position().x(), planta.position().y() + 1)
 	
 	method textColor() = paleta.verde()
-	
-	override method image() {
-		
-	}
 }
 
 class Planta inherits Transportable {
@@ -163,36 +158,31 @@ class Planta inherits Transportable {
 		return self.todasNecesidadesSatisfechas() and self.desarrollo() >= 99
 	}
 	
-	method modificarSol()
-	
-	method modificarAgua()
-	
-	method modificarTierra()
-	
 	method recibirEfectos(){
 		self.modificarSol()
 		self.modificarAgua()
 		self.modificarTierra()
 	}
+	
+	method modificarSol() {
+		nivelSol += entorno.solQueAporta()
+	}
+	
+	method modificarAgua() {
+		nivelAgua += entorno.aguaQueAporta()
+	}
+	
+	method modificarTierra() {
+		nivelTierra += entorno.tierraQueAporta()
+	}
 
 }
 
+// Para los distintos tipos de plantas en una iteración del juego se sobreescribirían los métodos de modificar sol, tierra y agua
 class PlantaPatagonica inherits Planta {
 
 	override method tipo() {
 		return "patagonica"
-	}
-	
-	override method modificarSol() {
-		nivelSol += entorno.solQueAporta()
-	}
-	
-	override method modificarAgua() {
-		nivelAgua += entorno.aguaQueAporta()
-	}
-	
-	override method modificarTierra() {
-		nivelTierra += entorno.tierraQueAporta()
 	}
 }
 
@@ -201,36 +191,12 @@ class PlantaHumeda inherits Planta {
 	override method tipo() {
 		return "humeda"
 	}
-	
-	override method modificarSol() {
-		nivelSol += entorno.solQueAporta()
-	}
-	
-	override method modificarAgua() {
-		nivelAgua += entorno.aguaQueAporta()
-	}
-	
-	override method modificarTierra() {
-		nivelTierra += entorno.tierraQueAporta()
-	}
 }
 
 class PlantaTropical inherits Planta {
 
 	override method tipo() {
 		return "tropical"
-	}
-	
-	override method modificarSol() {
-		nivelSol += entorno.solQueAporta()
-	}
-	
-	override method modificarAgua() {
-		nivelAgua += entorno.aguaQueAporta()
-	}
-	
-	override method modificarTierra() {
-		nivelTierra += entorno.tierraQueAporta()
 	}
 }
 
