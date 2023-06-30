@@ -22,6 +22,7 @@ class Planta inherits Transportable {
 	var nivelSol
 	var desarrollo = 0
 	var deterioro = 0
+	var property entorno = exterior
 	const property temporizador = new TemporizadorPlanta(planta = self) 
 	var property indicadorDeficitAgua = new IndicadorDeficitAgua(planta = self)
 	var property indicadorExcesoAgua = new IndicadorExcesoAgua(planta = self)
@@ -30,7 +31,6 @@ class Planta inherits Transportable {
 	var property indicadorDeficitTierra = new IndicadorDeficitTierra(planta = self)
 	var property indicadorExcesoTierra = new IndicadorExcesoTierra(planta = self)
 	var property parametros = new TextoAtributo(planta = self)
-	var entorno = exterior
 	
 
 	method actualizarNecesidades(pantalla) {
