@@ -30,7 +30,7 @@ class Pantalla {
 
 	method finalizarJuego() {
 		const plantas = elementos.filter({ elemento => elemento.esPlanta() })
-		if (self.obtenerFlorecidas(plantas) >= 3 && self.obtenerMarchitas(plantas) < 4) {
+		if (self.obtenerFlorecidas(plantas) >= 1 && self.obtenerMarchitas(plantas) < 4) {
 			self.ganar()
 		} else if (self.obtenerMarchitas(plantas) >= 4) {
 			self.perder()

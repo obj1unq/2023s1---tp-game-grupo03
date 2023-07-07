@@ -202,8 +202,14 @@ class PlantaTropical inherits Planta {
 
 class NivelDeCrecimiento {
 
-	method deterioroaAplicar()
-	method desarrolloaAplicar()
+	method deterioroaAplicar() {
+		return 33 //En tres ticks llega a 99, se cumple el deterioro >= 99
+	}
+
+	method desarrolloaAplicar() {
+		return 50
+	}
+
 
 	method minimoAgua()
 	{
@@ -212,7 +218,7 @@ class NivelDeCrecimiento {
 
 	method maximoAgua()
 	{
-		return 70
+		return 140
 	}
 
 	method minimoTierra()
@@ -222,7 +228,7 @@ class NivelDeCrecimiento {
 
 	method maximoTierra()
 	{
-		return 90
+		return 160
 	} // 90 - 60 = 30
 
 	method minimoSol()
@@ -232,7 +238,7 @@ class NivelDeCrecimiento {
 
 	method maximoSol()
 	{
-		return 60
+		return 130
 	}
 
 	method tiempoCrecimiento()
@@ -269,21 +275,12 @@ class NivelDeCrecimiento {
 object brote inherits NivelDeCrecimiento {
 
 	override method tiempoMarchitar() {
-		return 7000
+		return 6500
 	}
 
 	override method tiempoCrecimiento() {
-		return 5000
+		return 3500
 	}
-
-	override method deterioroaAplicar() {
-		return 33 //En tres ticks llega a 99, se cumple el deterioro >= 99
-	}
-
-	override method desarrolloaAplicar() {
-		return 50
-	}
-
 }
 
 object intermedio inherits NivelDeCrecimiento
@@ -291,15 +288,15 @@ object intermedio inherits NivelDeCrecimiento
 
 	override method tiempoMarchitar()
 	{
-		return 5000
+		return 6000
 	}
 
 	override method tiempoCrecimiento() {
-		return 7000
+		return 4500
 	}
 
 	override method minimoAgua() {
-		return super() * 1.3 // 40 * 1.3 = 52
+		return super() * 1.2 // 40 * 1.3 = 52
 	}
 
 	override method maximoAgua()
@@ -309,7 +306,7 @@ object intermedio inherits NivelDeCrecimiento
 
 	override method minimoTierra()
 	{
-		return super() * 1.3 // 60 * 1.3 = 78
+		return super() * 1.2 // 60 * 1.3 = 78
 	}
 
 	override method maximoTierra()
@@ -319,24 +316,13 @@ object intermedio inherits NivelDeCrecimiento
 
 	override method minimoSol()
 	{
-		return super() * 1.3 // 30 = 39
+		return super() * 1.2 // 30 = 39
 	}
 
 	override method maximoSol()
 	{
 		return super() * 0.9 // 60 = 54 --> 54-39 = 15
 	}
-
-	override method deterioroaAplicar()
-	{
-		return 50 // Se muere en dos ticks
-	}
-
-	override method desarrolloaAplicar()
-	{
-		return 33 // Crece en 3 ticks
-	}
-
 }
 
 object florecida inherits NivelDeCrecimiento {
